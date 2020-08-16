@@ -13,7 +13,7 @@ function setup() {
   puddles.push(puddle1);
   puddles.push(puddle2);
 
-  while (carrots.length < 10) {
+  while (carrots.length < 20) {
     let carrot = validCarrot();
     if (carrot != undefined)
       carrots.push(carrot);

@@ -17,6 +17,7 @@ class Bunny {
     this.acc = createVector();
 
     // qualities
+    this.running = false;
     this.state = 'roaming';
     this.faceDiameter = 40;
     this.sightDiameter = 150;
@@ -75,13 +76,10 @@ class Bunny {
     circle(this.pos.x, this.pos.y, this.sightDiameter);
     fill(255);
 
-    // text(this.hunger, this.pos.x, this.pos.y - 50);
-
     pop();
   }
 
   update(carrots) {
-
     this.hunger -= 0.1;
     this.hunger = constrain(this.hunger, 0, 100);
 
@@ -100,10 +98,25 @@ class Bunny {
       this.acc.mult(0);
       this.vel.limit(2);
 
+      // Lévy Flight
+      let rng = random(100);
+      if (rng < 0.1) {
+        this.running = true;
+        let strongForce = p5.Vector.random2D();
+        strongForce.mult(10);
+        this.applyForce(strongForce);
+        setTimeout(() => {
+          this.running = false;
+        }, 3000);
+      }
       // random walk
-      let randomForce = p5.Vector.random2D();
-      randomForce.mult(0.5);
-      this.applyForce(randomForce);
+      if (!this.running) {
+        let randomForce = p5.Vector.random2D();
+        randomForce.mult(0.5);
+        this.applyForce(randomForce);
+      }
+
+
 
       // collision with edges
       // if (this.pos.x - this.faceDiameter / 2 < 0 || this.pos.x + this.faceDiameter / 2 > width)
