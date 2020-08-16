@@ -1,15 +1,14 @@
 class Carrot {
-  constructor() {
-    this.pos = createVector(random(20, width - 20), random(20, height - 20));
+  constructor(x, y) {
+    this.pos = createVector(x, y);
     this.diameter = 10;
-    this.taken = false;
   }
 
   show() {
     push();
     fill(240, 100, 10);
     noStroke();
-    ellipse(this.pos.x, this.pos.y, 10, this.diameter);
+    circle(this.pos.x, this.pos.y, this.diameter);
     pop();
   }
 }

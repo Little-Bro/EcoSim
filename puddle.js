@@ -1,16 +1,18 @@
 class Puddle {
-  constructor(x, y) {
+  constructor(x, y, min, max) {
     this.pos = createVector(x, y);
     this.r = random(40, 50);
     this.radius;
     this.vertices = [];
+    this.min = min;
+    this.max = max;
 
     // generating vertices
     let i = 0;
     for (let a = 0; a < TWO_PI; a += 0.1) {
       let xoff = cos(a) + 1;
       let yoff = sin(a) + 1;
-      let r = map(noise(xoff, yoff), 0, 1, 100, 200);
+      let r = map(noise(xoff, yoff), 0, 1, this.min, this.max);
       this.radius = r;
       let x = r * cos(a);
       let y = r * sin(a);
@@ -32,10 +34,9 @@ class Puddle {
     for (let i = 0; i < this.vertices.length; i++) {
       vertex(this.vertices[i].x, this.vertices[i].y);
     }
-
     endShape(CLOSE);
     pop();
     // noFill();
-    // circle(this.pos.x, this.pos.y, this.radius + 160);
+    // circle(this.pos.x, this.pos.y, this.radius + (this.min + this.max) * 0.5);
   }
 }
