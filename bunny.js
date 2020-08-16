@@ -26,8 +26,8 @@ class Bunny {
 
   show() {
     push();
-
     fill(this.colour);
+
     // big bunny ears
     ellipse(this.pos.x - 7, this.pos.y - 25, 10, 30);
     ellipse(this.pos.x + 7, this.pos.y - 25, 10, 30);
@@ -36,6 +36,7 @@ class Bunny {
     ellipse(this.pos.x - 7, this.pos.y - 25, 5, 20);
     ellipse(this.pos.x + 7, this.pos.y - 25, 5, 20);
     pop();
+
     // face shape
     ellipse(this.pos.x, this.pos.y, this.faceDiameter);
 
@@ -46,8 +47,18 @@ class Bunny {
 
     // eyes
     fill(0);
-    ellipse(this.pos.x - 5, this.pos.y - 5, 5);
-    ellipse(this.pos.x + 5, this.pos.y - 5, 5);
+    if (this.state != 'dead') {
+      ellipse(this.pos.x - 5, this.pos.y - 5, 5);
+      ellipse(this.pos.x + 5, this.pos.y - 5, 5);
+    } else {
+      // left eye
+      line(this.pos.x - 7, this.pos.y - 7, this.pos.x - 3, this.pos.y - 3);
+      line(this.pos.x - 3, this.pos.y - 7, this.pos.x - 7, this.pos.y - 3);
+      // right eye
+      line(this.pos.x + 7, this.pos.y - 7, this.pos.x + 3, this.pos.y - 3);
+      line(this.pos.x + 3, this.pos.y - 7, this.pos.x + 7, this.pos.y - 3);
+    }
+
     fill(255);
 
     // mouth
@@ -76,61 +87,67 @@ class Bunny {
 
     if (this.hunger < 50) {
       this.state = 'hungry';
+      if (this.hunger == 0) {
+        this.state = 'dead';
+      }
     } else {
       this.state = 'roaming';
     }
+    if (this.state != 'dead') {
+      // physics
+      this.vel.add(this.acc);
+      this.pos.add(this.vel);
+      this.acc.mult(0);
+      this.vel.limit(2);
 
-    // physics
-    this.vel.add(this.acc);
-    this.pos.add(this.vel);
-    this.acc.mult(0);
-    this.vel.limit(2);
+      // random walk
+      let randomForce = p5.Vector.random2D();
+      randomForce.mult(0.5);
+      this.applyForce(randomForce);
 
-    // random walk
-    let randomForce = p5.Vector.random2D();
-    randomForce.mult(0.5);
-    this.applyForce(randomForce);
+      // collision with edges
+      // if (this.pos.x - this.faceDiameter / 2 < 0 || this.pos.x + this.faceDiameter / 2 > width)
+      //   this.vel.x *= -1;
+      // if (this.pos.y - this.faceDiameter / 2 < 0 || this.pos.y + this.faceDiameter / 2 > height)
+      //   this.vel.y *= -1;
+      this.pos.x = constrain(this.pos.x, this.faceDiameter / 2, width - this.faceDiameter / 2);
+      this.pos.y = constrain(this.pos.y, this.faceDiameter / 2, height - this.faceDiameter / 2);
 
-    // collision with edges
-    // if (this.pos.x - this.faceDiameter / 2 < 0 || this.pos.x + this.faceDiameter / 2 > width)
-    //   this.vel.x *= -1;
-    // if (this.pos.y - this.faceDiameter / 2 < 0 || this.pos.y + this.faceDiameter / 2 > height)
-    //   this.vel.y *= -1;
-    this.pos.x = constrain(this.pos.x, this.faceDiameter / 2, width - this.faceDiameter / 2);
-    this.pos.y = constrain(this.pos.y, this.faceDiameter / 2, height - this.faceDiameter / 2);
-
-    // detect closest carrot
-    let closest = null;
-    let record = Infinity;
-    for (let i = 0; i < carrots.length; i++) {
-      let d = dist(this.pos.x, this.pos.y, carrots[i].pos.x, carrots[i].pos.y);
-      if (d < record) {
-        record = d;
-        closest = carrots[i];
+      // detect closest carrot
+      let closest = null;
+      let record = Infinity;
+      for (let i = 0; i < carrots.length; i++) {
+        let d = dist(this.pos.x, this.pos.y, carrots[i].pos.x, carrots[i].pos.y);
+        if (d < record) {
+          record = d;
+          closest = carrots[i];
+        }
       }
-    }
 
-    // moving towards closest carrot if it is detected and if bunny is hungry
-    if (closest && this.state == 'hungry') {
-      let index = carrots.indexOf(closest);
-      let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-      if (d < closest.diameter / 2 + this.sightDiameter / 2) {
-        // line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-        this.moveTowards(closest.pos);
-        if (d < 1) {
-          carrots.splice(index, 1);
-          this.hunger = 100;
-          setTimeout(() => {
-            carrots.push(new Carrot());
-          }, 3000); // another carrot spawns three seconds later
+      // moving towards closest carrot if it is detected and if bunny is hungry
+      if (closest && this.state == 'hungry') {
+        let index = carrots.indexOf(closest);
+        let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+        if (d < closest.diameter / 2 + this.sightDiameter / 2) {
+          // line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+          this.moveTowards(closest.pos);
+          if (d < 1) {
+            carrots.splice(index, 1);
+            this.hunger = 100;
+            setTimeout(() => {
+              carrots.push(new Carrot());
+            }, 3000); // another carrot spawns three seconds later
+          }
         }
       }
     }
+
 
     // debug
     let mouseDist = dist(this.pos.x, this.pos.y, mouseX, mouseY);
     if (mouseDist < this.sightDiameter / 2) {
       text(this.state, this.pos.x - 20, this.pos.y - 50);
+      text(this.name, this.pos.x - 20, this.pos.y + 50);
       if (mouseIsPressed)
         this.selected = true;
     }

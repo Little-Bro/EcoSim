@@ -1,6 +1,6 @@
 class Carrot {
   constructor() {
-    this.pos = createVector(random(width), random(height));
+    this.pos = createVector(random(20, width - 20), random(20, height - 20));
     this.diameter = 10;
     this.taken = false;
   }
