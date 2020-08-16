@@ -22,7 +22,6 @@ class Bunny {
     this.sightDiameter = 150;
     this.hunger = 100;
     this.selected = false;
-
   }
 
   show() {
@@ -32,11 +31,16 @@ class Bunny {
     // big bunny ears
     ellipse(this.pos.x - 7, this.pos.y - 25, 10, 30);
     ellipse(this.pos.x + 7, this.pos.y - 25, 10, 30);
-
+    push();
+    fill(230, 175, 230);
+    ellipse(this.pos.x - 7, this.pos.y - 25, 5, 20);
+    ellipse(this.pos.x + 7, this.pos.y - 25, 5, 20);
+    pop();
     // face shape
     ellipse(this.pos.x, this.pos.y, this.faceDiameter);
 
     // big bunny teeth
+    fill(255);
     ellipse(this.pos.x - 2, this.pos.y + 4, 4, 5);
     ellipse(this.pos.x + 2, this.pos.y + 4, 4, 5);
 
@@ -88,10 +92,12 @@ class Bunny {
     this.applyForce(randomForce);
 
     // collision with edges
-    if (this.pos.x - this.faceDiameter / 2 < 0 || this.pos.x + this.faceDiameter / 2 > width)
-      this.vel.x *= -1;
-    if (this.pos.y - this.faceDiameter / 2 < 0 || this.pos.y + this.faceDiameter / 2 > height)
-      this.vel.y *= -1;
+    // if (this.pos.x - this.faceDiameter / 2 < 0 || this.pos.x + this.faceDiameter / 2 > width)
+    //   this.vel.x *= -1;
+    // if (this.pos.y - this.faceDiameter / 2 < 0 || this.pos.y + this.faceDiameter / 2 > height)
+    //   this.vel.y *= -1;
+    this.pos.x = constrain(this.pos.x, this.faceDiameter / 2, width - this.faceDiameter / 2);
+    this.pos.y = constrain(this.pos.y, this.faceDiameter / 2, height - this.faceDiameter / 2);
 
     // detect closest carrot
     let closest = null;
