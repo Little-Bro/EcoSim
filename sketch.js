@@ -24,7 +24,7 @@ function draw() {
 
   for (bunny of bunnies) {
     if (bunny.selected) {
-      debugInfo.html( 'name : ' + bunny.name + ' state : ' + bunny.state);
+      debugInfo.html('name : ' + bunny.name + ' state : ' + bunny.state + ' sex : ' + bunny.sex);
     }
     bunny.show();
     bunny.update(carrots);

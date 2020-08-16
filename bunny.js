@@ -1,19 +1,34 @@
 class Bunny {
   constructor() {
-    this.names = ['Roger', 'Michael', 'Robert', 'Eugene', 'Louis', 'Arthur'];
+    // individuality
+    this.sex = random() > 0.5 ? 'male' : 'female';
+    if (this.sex == 'female') {
+      this.colour = 255; // all females have white fur
+      this.names = ['Louise', 'Beatrice', 'Diane', 'Jane', 'Helen', 'Emma'];
+    } else {
+      this.colour = map(random(), 0, 1, 80, 150); // males have a greyish fur
+      this.names = ['Roger', 'Michael', 'Robert', 'Eugene', 'Louis', 'Arthur'];
+    }
     this.name = this.names[Math.floor(Math.random() * this.names.length)];
+
+    // physics
     this.pos = createVector(random(width), random(height));
     this.vel = createVector();
     this.acc = createVector();
+
+    // qualities
     this.state = 'roaming';
     this.faceDiameter = 40;
     this.sightDiameter = 150;
     this.hunger = 100;
     this.selected = false;
+
   }
 
   show() {
     push();
+
+    fill(this.colour);
     // big bunny ears
     ellipse(this.pos.x - 7, this.pos.y - 25, 10, 30);
     ellipse(this.pos.x + 7, this.pos.y - 25, 10, 30);

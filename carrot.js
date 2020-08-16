@@ -8,6 +8,7 @@ class Carrot {
   show() {
     push();
     fill(240, 100, 10);
+    noStroke();
     ellipse(this.pos.x, this.pos.y, 10, this.diameter);
     pop();
   }
