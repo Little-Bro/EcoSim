@@ -37,8 +37,8 @@ function draw() {
 
 // avoids carrots from spawning in puddles
 function validCarrot() {
-  let x = random(40, width - 40);
-  let y = random(40, height - 40);
+  let x = random(50, width - 50);
+  let y = random(50, height - 50);
   let valid = true;
 
   for (let puddle of puddles) {

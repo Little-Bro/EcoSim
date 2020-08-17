@@ -116,8 +116,6 @@ class Bunny {
         this.applyForce(randomForce);
       }
 
-
-
       // collision with edges
       // if (this.pos.x - this.faceDiameter / 2 < 0 || this.pos.x + this.faceDiameter / 2 > width)
       //   this.vel.x *= -1;
@@ -126,9 +124,6 @@ class Bunny {
       this.pos.x = constrain(this.pos.x, this.faceDiameter / 2, width - this.faceDiameter / 2);
       this.pos.y = constrain(this.pos.y, this.faceDiameter / 2, height - this.faceDiameter / 2);
 
-
-
-      // moving towards closest carrot if it is detected and if bunny is hungry
       if (this.state == 'hungry') {
         // detect closest carrot
         let closest = null;
@@ -158,7 +153,6 @@ class Bunny {
         }
       }
     }
-
 
     // debug
     let mouseDist = dist(this.pos.x, this.pos.y, mouseX, mouseY);
