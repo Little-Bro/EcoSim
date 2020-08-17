@@ -121,8 +121,16 @@ class Bunny {
       //   this.vel.x *= -1;
       // if (this.pos.y - this.faceDiameter / 2 < 0 || this.pos.y + this.faceDiameter / 2 > height)
       //   this.vel.y *= -1;
-      this.pos.x = constrain(this.pos.x, this.faceDiameter / 2, width - this.faceDiameter / 2);
-      this.pos.y = constrain(this.pos.y, this.faceDiameter / 2, height - this.faceDiameter / 2);
+      // this.pos.x = constrain(this.pos.x, this.faceDiameter / 2, width - this.faceDiameter / 2);
+      // this.pos.y = constrain(this.pos.y, this.faceDiameter / 2, height - this.faceDiameter / 2);
+      if (this.pos.x < 0)
+        this.pos.x = width;
+      else if (this.pos.x > width)
+        this.pos.x = 0;
+      if (this.pos.y < 0)
+        this.pos.y = height;
+      else if (this.pos.y > height)
+        this.pos.y = 0;
 
       if (this.state == 'hungry') {
         // detect closest carrot
