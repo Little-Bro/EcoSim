@@ -21,7 +21,7 @@ class Bunny {
     this.state = 'roaming';
     this.faceDiameter = 40;
     this.sightDiameter = 150;
-    this.hunger = 100;
+    this.hunger = 0;
     this.selected = false;
   }
 
@@ -80,12 +80,12 @@ class Bunny {
   }
 
   update(carrots) {
-    this.hunger -= 0.1;
+    this.hunger += 0.1;
     this.hunger = constrain(this.hunger, 0, 100);
 
-    if (this.hunger < 50) {
+    if (this.hunger > 50) {
       this.state = 'hungry';
-      if (this.hunger == 0) {
+      if (this.hunger == 100) {
         this.state = 'dead';
       }
     } else {
@@ -152,7 +152,7 @@ class Bunny {
             this.moveTowards(closest.pos);
             if (d < 1) {
               carrots.splice(index, 1);
-              this.hunger = 100;
+              this.hunger = 0;
               setTimeout(() => {
                 let carrot = validCarrot();
                 if (carrot != undefined)
