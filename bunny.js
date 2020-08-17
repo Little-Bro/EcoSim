@@ -154,7 +154,9 @@ class Bunny {
               carrots.splice(index, 1);
               this.hunger = 100;
               setTimeout(() => {
-                carrots.push(new Carrot());
+                let carrot = validCarrot();
+                if (carrot != undefined)
+                  carrots.push(carrot);
               }, 3000); // another carrot spawns three seconds later
             }
           }
