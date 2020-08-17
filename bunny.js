@@ -126,30 +126,34 @@ class Bunny {
       this.pos.x = constrain(this.pos.x, this.faceDiameter / 2, width - this.faceDiameter / 2);
       this.pos.y = constrain(this.pos.y, this.faceDiameter / 2, height - this.faceDiameter / 2);
 
-      // detect closest carrot
-      let closest = null;
-      let record = Infinity;
-      for (let i = 0; i < carrots.length; i++) {
-        let d = dist(this.pos.x, this.pos.y, carrots[i].pos.x, carrots[i].pos.y);
-        if (d < record) {
-          record = d;
-          closest = carrots[i];
-        }
-      }
+
 
       // moving towards closest carrot if it is detected and if bunny is hungry
-      if (closest && this.state == 'hungry') {
-        let index = carrots.indexOf(closest);
-        let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-        if (d < closest.diameter / 2 + this.sightDiameter / 2) {
-          // line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-          this.moveTowards(closest.pos);
-          if (d < 1) {
-            carrots.splice(index, 1);
-            this.hunger = 100;
-            setTimeout(() => {
-              carrots.push(new Carrot());
-            }, 3000); // another carrot spawns three seconds later
+      if (this.state == 'hungry') {
+        // detect closest carrot
+        let closest = null;
+        let record = Infinity;
+        for (let i = 0; i < carrots.length; i++) {
+          let d = dist(this.pos.x, this.pos.y, carrots[i].pos.x, carrots[i].pos.y);
+          if (d < record) {
+            record = d;
+            closest = carrots[i];
+          }
+        }
+
+        if (closest) {
+          let index = carrots.indexOf(closest);
+          let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+          if (d < closest.diameter / 2 + this.sightDiameter / 2) {
+            // line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+            this.moveTowards(closest.pos);
+            if (d < 1) {
+              carrots.splice(index, 1);
+              this.hunger = 100;
+              setTimeout(() => {
+                carrots.push(new Carrot());
+              }, 3000); // another carrot spawns three seconds later
+            }
           }
         }
       }
