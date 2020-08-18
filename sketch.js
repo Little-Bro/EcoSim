@@ -19,6 +19,10 @@ function setup() {
     if (bunny != undefined)
       bunnies.push(bunny);
   }
+  // forcing first gen of bunnies to be adults
+  for (const bunny of bunnies) {
+    bunny.adult = true;
+  }
 
   while (carrots.length < 30) {
     let carrot = validEntity('carrot');
