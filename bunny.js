@@ -29,7 +29,6 @@ class Bunny {
 
   show() {
     push();
-
     fill(this.colour);
 
     // big bunny ears
@@ -86,66 +85,10 @@ class Bunny {
 
   update(carrots, puddles) {
     if (this.state != 'dead') {
-      // update levels
-      if (!this.isDrinking)
-        this.thirst += 0.1;
-      this.thirst = constrain(this.thirst, 0, 100);
-      this.hunger += 0.1;
-      this.hunger = constrain(this.hunger, 0, 100);
-
-      // determine the actual state
-      if (this.thirst < 50 && this.hunger < 50) {
-        this.state = 'roaming';
-      } else {
-        let maximum = Math.max(this.hunger, this.thirst);
-        if (maximum > 50) {
-          if (maximum == this.hunger) {
-            this.state = 'hungry';
-          } else if (maximum == this.thirst) {
-            this.state = 'thirsty';
-          }
-        }
-      }
-
-      // physics
-      this.vel.add(this.acc);
-      this.pos.add(this.vel);
-      this.acc.mult(0);
-      this.vel.limit(2);
-
-      // Lévy Flight
-      let rng = random(100);
-      if (rng < 0.1) {
-        this.running = true;
-        let strongForce = p5.Vector.random2D();
-        strongForce.mult(10);
-        this.applyForce(strongForce);
-        setTimeout(() => {
-          this.running = false;
-        }, 3000);
-      }
-      // random walk
-      if (!this.running) {
-        let randomForce = p5.Vector.random2D();
-        randomForce.mult(0.5);
-        this.applyForce(randomForce);
-      }
-
-      // collision with edges
-      // if (this.pos.x - this.faceDiameter / 2 < 0 || this.pos.x + this.faceDiameter / 2 > width)
-      //   this.vel.x *= -1;
-      // if (this.pos.y - this.faceDiameter / 2 < 0 || this.pos.y + this.faceDiameter / 2 > height)
-      //   this.vel.y *= -1;
-      // this.pos.x = constrain(this.pos.x, this.faceDiameter / 2, width - this.faceDiameter / 2);
-      // this.pos.y = constrain(this.pos.y, this.faceDiameter / 2, height - this.faceDiameter / 2);
-      if (this.pos.x < 0)
-        this.pos.x = width;
-      else if (this.pos.x > width)
-        this.pos.x = 0;
-      if (this.pos.y < 0)
-        this.pos.y = height;
-      else if (this.pos.y > height)
-        this.pos.y = 0;
+      this.updateLevels();
+      this.determineState();
+      this.applyPhysics();
+      this.moveAround();
 
       if (this.state == 'hungry') {
         // detect closest carrot
@@ -158,7 +101,7 @@ class Bunny {
             closest = carrots[i];
           }
         }
-
+        // does the bunny see the closest carrot ? If so, it moves towards it
         if (closest) {
           let index = carrots.indexOf(closest);
           let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
@@ -200,24 +143,76 @@ class Bunny {
             }
           }
         }
-
       }
-
     }
 
     if (this.hunger == 100 || this.thirst == 100) {
       this.state = 'dead';
     }
   }
-  applyForce(force) {
-    this.acc.add(force);
+  updateLevels() {
+    if (!this.isDrinking)
+      this.thirst += 0.1;
+    this.thirst = constrain(this.thirst, 0, 100);
+    this.hunger += 0.1;
+    this.hunger = constrain(this.hunger, 0, 100);
   }
-
+  determineState() {
+    if (this.thirst < 50 && this.hunger < 50) {
+      this.state = 'roaming';
+    } else {
+      let maximum = Math.max(this.hunger, this.thirst);
+      if (maximum > 50) {
+        if (maximum == this.hunger) {
+          this.state = 'hungry';
+        } else if (maximum == this.thirst) {
+          this.state = 'thirsty';
+        }
+      }
+    }
+  }
+  applyPhysics() {
+    this.vel.add(this.acc);
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+    this.vel.limit(2);
+  }
+  moveAround() {
+    // Lévy Flight
+    let rng = random(100);
+    if (rng < 0.1) {
+      this.running = true;
+      let strongForce = p5.Vector.random2D();
+      strongForce.mult(10);
+      this.applyForce(strongForce);
+      setTimeout(() => {
+        this.running = false;
+      }, 3000);
+    }
+    // random walk
+    if (!this.running) {
+      let randomForce = p5.Vector.random2D();
+      randomForce.mult(0.5);
+      this.applyForce(randomForce);
+    }
+    // screen wrap
+    if (this.pos.x < 0)
+      this.pos.x = width;
+    else if (this.pos.x > width)
+      this.pos.x = 0;
+    if (this.pos.y < 0)
+      this.pos.y = height;
+    else if (this.pos.y > height)
+      this.pos.y = 0;
+  }
   moveTowards(targetPos) {
     let force = p5.Vector.sub(targetPos, this.pos);
     let distance = force.mag();
     force.normalize();
     force.mult(0.5);
     this.applyForce(force);
+  }
+  applyForce(force) {
+    this.acc.add(force);
   }
 }

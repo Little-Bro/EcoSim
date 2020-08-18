@@ -5,6 +5,7 @@ let debugCheckBox;
 
 function setup() {
   createCanvas(700, 700);
+  // debug information
   debugCheckBox = createCheckbox('Show debug info', false);
   debugCheckBox.changed(clicked);
 
@@ -13,7 +14,7 @@ function setup() {
   puddles.push(puddle1);
   puddles.push(puddle2);
 
-  while (bunnies.length < 20) {
+  while (bunnies.length < 15) {
     let bunny = validEntity('bunny');
     if (bunny != undefined)
       bunnies.push(bunny);
@@ -28,6 +29,7 @@ function setup() {
 
 function draw() {
   background(40, 195, 50);
+
   for (let puddle of puddles) {
     puddle.show();
   }
