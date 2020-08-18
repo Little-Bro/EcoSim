@@ -143,6 +143,15 @@ class Bunny {
             }
           }
         }
+      } else if (this.state != 'thirsty') {
+        // bouncing off water
+        for (let puddle of puddles) {
+          let d = dist(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
+          if (d < this.faceDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
+            let force = p5.Vector.sub(puddle.pos, this.pos);
+            this.applyForce(force.normalize().mult(-1));
+          }
+        }
       }
     }
 
