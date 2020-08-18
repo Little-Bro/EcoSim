@@ -21,7 +21,9 @@ class Bunny {
     this.state = 'roaming';
     this.faceDiameter = 40;
     this.sightDiameter = 150;
-    this.hunger = 0;
+    this.isDrinking = false;
+    this.hunger = random(25);
+    this.thirst = random(25);
     this.debug = false;
   }
 
@@ -67,28 +69,43 @@ class Bunny {
     line(this.pos.x - 10, this.pos.y + 2, this.pos.x + 10, this.pos.y + 2);
     strokeWeight(1);
 
-    // sight circle
+    // debug info
     noFill();
     if (this.debug) {
       stroke(0);
+      strokeWeight(1);
       circle(this.pos.x, this.pos.y, this.sightDiameter);
+      text(this.state, this.pos.x - 20, this.pos.y - 50);
+      text('h:' + floor(this.hunger), this.pos.x - 20, this.pos.y + 30);
+      text('t:' + floor(this.thirst), this.pos.x - 20, this.pos.y + 50);
+      //text(this.name, this.pos.x - 20, this.pos.y + 50);
     }
     pop();
   }
 
-  update(carrots) {
-    this.hunger += 0.1;
-    this.hunger = constrain(this.hunger, 0, 100);
-
-    if (this.hunger > 50) {
-      this.state = 'hungry';
-      if (this.hunger == 100) {
-        this.state = 'dead';
-      }
-    } else {
-      this.state = 'roaming';
-    }
+  update(carrots, puddles) {
     if (this.state != 'dead') {
+      // update levels
+      if (!this.isDrinking)
+        this.thirst += 0.1;
+      this.thirst = constrain(this.thirst, 0, 100);
+      this.hunger += 0.1;
+      this.hunger = constrain(this.hunger, 0, 100);
+
+      // determine the actual state
+      if (this.thirst < 50 && this.hunger < 50) {
+        this.state = 'roaming';
+      } else {
+        let maximum = Math.max(this.hunger, this.thirst);
+        if (maximum > 50) {
+          if (maximum == this.hunger) {
+            this.state = 'hungry';
+          } else if (maximum == this.thirst) {
+            this.state = 'thirsty';
+          }
+        }
+      }
+
       // physics
       this.vel.add(this.acc);
       this.pos.add(this.vel);
@@ -162,16 +179,36 @@ class Bunny {
           }
         }
       }
+
+      if (this.state == 'thirsty') {
+        for (let puddle of puddles) {
+          let d = dist(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
+          if (d < this.sightDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
+            if (this.debug)
+              line(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
+
+            if (d < this.faceDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
+              this.vel.mult(0);
+              this.isDrinking = true;
+              setTimeout(() => {
+                this.thirst = 0;
+                this.isDrinking = false;
+              }, 3000);
+            } else {
+              this.moveTowards(puddle.pos);
+            }
+          }
+        }
+
+      }
+
     }
 
-    // debug
-    if (this.debug) {
-      text(this.state, this.pos.x - 20, this.pos.y - 50);
-      text(this.name, this.pos.x - 20, this.pos.y + 50);
+    if (this.hunger == 100 || this.thirst == 100) {
+      this.state = 'dead';
+      console.log('goodbye cruel world');
     }
-
   }
-
   applyForce(force) {
     this.acc.add(force);
   }

@@ -34,7 +34,7 @@ function draw() {
   }
   for (let bunny of bunnies) {
     bunny.show();
-    bunny.update(carrots);
+    bunny.update(carrots, puddles);
   }
 }
 
@@ -64,5 +64,11 @@ function clicked() {
       bunny.debug = true;
     else
       bunny.debug = false;
+  }
+  for (let puddle of puddles) {
+    if (this.checked())
+      puddle.debug = true;
+    else
+      puddle.debug = false;
   }
 }
