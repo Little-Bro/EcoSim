@@ -50,8 +50,7 @@ function validEntity(entity) {
 
   for (let puddle of puddles) {
     let d = dist(x, y, puddle.pos.x, puddle.pos.y);
-    let r = 0;
-    if (d < 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
+    if (d - 20 < 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
       valid = false;
       break;
     }
