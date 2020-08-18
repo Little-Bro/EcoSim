@@ -1,9 +1,12 @@
 let bunnies = [];
 let carrots = [];
 let puddles = [];
+let debugCheckBox;
 
 function setup() {
   createCanvas(700, 700);
+  debugCheckBox = createCheckbox('Show debug info', false);
+  debugCheckBox.changed(clicked);
   for (let i = 0; i < 5; i++) {
     bunnies[i] = new Bunny();
   }
@@ -52,5 +55,14 @@ function validCarrot() {
     return new Carrot(x, y);
   } else {
     return undefined;
+  }
+}
+
+function clicked() {
+  for (let bunny of bunnies) {
+    if (this.checked())
+      bunny.debug = true;
+    else
+      bunny.debug = false;
   }
 }

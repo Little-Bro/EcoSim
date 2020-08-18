@@ -22,7 +22,7 @@ class Bunny {
     this.faceDiameter = 40;
     this.sightDiameter = 150;
     this.hunger = 0;
-    this.selected = false;
+    this.debug = false;
   }
 
   show() {
@@ -69,13 +69,10 @@ class Bunny {
 
     // sight circle
     noFill();
-    if (this.selected)
-      stroke(255, 0, 0);
-    else
+    if (this.debug) {
       stroke(0);
-    circle(this.pos.x, this.pos.y, this.sightDiameter);
-    fill(255);
-
+      circle(this.pos.x, this.pos.y, this.sightDiameter);
+    }
     pop();
   }
 
@@ -148,7 +145,8 @@ class Bunny {
           let index = carrots.indexOf(closest);
           let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
           if (d < closest.diameter / 2 + this.sightDiameter / 2) {
-            // line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+            if (this.debug)
+              line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
             this.moveTowards(closest.pos);
             if (d < 1) {
               carrots.splice(index, 1);
@@ -167,13 +165,11 @@ class Bunny {
     }
 
     // debug
-    let mouseDist = dist(this.pos.x, this.pos.y, mouseX, mouseY);
-    if (mouseDist < this.sightDiameter / 2) {
+    if (this.debug) {
       text(this.state, this.pos.x - 20, this.pos.y - 50);
       text(this.name, this.pos.x - 20, this.pos.y + 50);
-      if (mouseIsPressed)
-        this.selected = true;
     }
+
   }
 
   applyForce(force) {
