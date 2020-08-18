@@ -25,6 +25,7 @@ class Bunny {
     this.hunger = random(25);
     this.thirst = random(25);
     this.debug = false;
+    this.timeAfterDeath = 0;
   }
 
   show() {
@@ -153,6 +154,8 @@ class Bunny {
           }
         }
       }
+    } else {
+      this.timeAfterDeath += 0.1;
     }
 
     if (this.hunger == 100 || this.thirst == 100) {
