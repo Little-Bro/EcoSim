@@ -7,17 +7,20 @@ function setup() {
   createCanvas(700, 700);
   debugCheckBox = createCheckbox('Show debug info', false);
   debugCheckBox.changed(clicked);
-  for (let i = 0; i < 5; i++) {
-    bunnies[i] = new Bunny();
-  }
 
   puddle1 = new Puddle(300, 200, 100, 150);
   puddle2 = new Puddle(600, 600, 75, 120);
   puddles.push(puddle1);
   puddles.push(puddle2);
 
-  while (carrots.length < 20) {
-    let carrot = validCarrot();
+  while (bunnies.length < 20) {
+    let bunny = validEntity('bunny');
+    if (bunny != undefined)
+      bunnies.push(bunny);
+  }
+
+  while (carrots.length < 30) {
+    let carrot = validEntity('carrot');
     if (carrot != undefined)
       carrots.push(carrot);
   }
@@ -25,7 +28,6 @@ function setup() {
 
 function draw() {
   background(40, 195, 50);
-
   for (let puddle of puddles) {
     puddle.show();
   }
@@ -38,21 +40,26 @@ function draw() {
   }
 }
 
-// avoids carrots from spawning in puddles
-function validCarrot() {
+// avoid things from spawning in puddles
+function validEntity(entity) {
   let x = random(50, width - 50);
   let y = random(50, height - 50);
   let valid = true;
 
   for (let puddle of puddles) {
     let d = dist(x, y, puddle.pos.x, puddle.pos.y);
+    let r = 0;
     if (d < 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
       valid = false;
       break;
     }
   }
   if (valid) {
-    return new Carrot(x, y);
+    if (entity == 'bunny') {
+      return new Bunny(x, y);
+    } else if (entity == 'carrot') {
+      return new Carrot(x, y);
+    }
   } else {
     return undefined;
   }

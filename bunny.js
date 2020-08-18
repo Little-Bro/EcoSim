@@ -1,5 +1,5 @@
 class Bunny {
-  constructor() {
+  constructor(x, y) {
     // individuality
     this.sex = random() > 0.5 ? 'male' : 'female';
     if (this.sex == 'female') {
@@ -12,7 +12,7 @@ class Bunny {
     this.name = this.names[Math.floor(Math.random() * this.names.length)];
 
     // physics
-    this.pos = createVector(random(width), random(height));
+    this.pos = createVector(x, y);
     this.vel = createVector();
     this.acc = createVector();
 
@@ -29,6 +29,7 @@ class Bunny {
 
   show() {
     push();
+
     fill(this.colour);
 
     // big bunny ears
@@ -71,14 +72,14 @@ class Bunny {
 
     // debug info
     noFill();
-    if (this.debug) {
+    if (this.debug && this.state != 'dead') {
       stroke(0);
       strokeWeight(1);
       circle(this.pos.x, this.pos.y, this.sightDiameter);
-      text(this.state, this.pos.x - 20, this.pos.y - 50);
-      text('h:' + floor(this.hunger), this.pos.x - 20, this.pos.y + 30);
-      text('t:' + floor(this.thirst), this.pos.x - 20, this.pos.y + 50);
-      //text(this.name, this.pos.x - 20, this.pos.y + 50);
+      text(this.name, this.pos.x - 15, this.pos.y - 50);
+      // text('h:' + floor(this.hunger), this.pos.x - 20, this.pos.y + 30);
+      // text('t:' + floor(this.thirst), this.pos.x - 20, this.pos.y + 50);
+      text(this.state, this.pos.x - 20, this.pos.y + 50);
     }
     pop();
   }
@@ -171,7 +172,7 @@ class Bunny {
               setTimeout(() => {
                 let carrot;
                 while (carrot == undefined) {
-                  carrot = validCarrot();
+                  carrot = validEntity('carrot');
                 }
                 carrots.push(carrot);
               }, 3000); // another carrot spawns three seconds later
@@ -206,7 +207,6 @@ class Bunny {
 
     if (this.hunger == 100 || this.thirst == 100) {
       this.state = 'dead';
-      console.log('goodbye cruel world');
     }
   }
   applyForce(force) {
