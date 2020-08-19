@@ -2,23 +2,36 @@ let bunnies = [];
 let carrots = [];
 let puddles = [];
 let debugCheckBox;
+let p1, p2, p3;
+let population;
 
 function setup() {
   createCanvas(700, 700);
-  // debug information
+  // html
   debugCheckBox = createCheckbox('Show debug info', false);
   debugCheckBox.changed(clicked);
+  debugCheckBox.position(450, 20);
+  p1 = createP('female bunnies are white, males are grey-ish');
+  p2 = createP('pregnant bunnies turn red');
+  p3 = createP('bunnies with pink eyes want to mate');
+  population = createElement('h3');
+  p1.position(720, 50);
+  p2.position(720, 90);
+  p3.position(720, 130);
+  population.position(720, 200);
 
+  // generating puddles
   puddle1 = new Puddle(300, 200, 100, 150);
   puddle2 = new Puddle(600, 600, 75, 120);
   puddles.push(puddle1);
   puddles.push(puddle2);
 
-  while (bunnies.length < 15) {
+  while (bunnies.length < 5) {
     let bunny = validEntity('bunny');
     if (bunny != undefined)
       bunnies.push(bunny);
   }
+
   // forcing first gen of bunnies to be adults
   for (const bunny of bunnies) {
     bunny.adult = true;
@@ -34,6 +47,8 @@ function setup() {
 function draw() {
   background(40, 195, 50);
 
+  population.html('population : ' + bunnies.length);
+
   for (let puddle of puddles) {
     puddle.show();
   }
@@ -42,7 +57,7 @@ function draw() {
   }
   for (let bunny of bunnies) {
     bunny.show();
-    bunny.update(carrots, puddles);
+    bunny.update(carrots, puddles, bunnies);
     if (bunny.timeAfterDeath > 30) {
       let index = bunnies.indexOf(bunny);
       bunnies.splice(index, 1);
