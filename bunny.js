@@ -1,4 +1,4 @@
-cclass Bunny {
+class Bunny {
   constructor(x, y) {
     // sex, name
     this.sex = random() > 0.5 ? 'male' : 'female';
