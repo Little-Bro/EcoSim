@@ -1,13 +1,15 @@
-class Bunny {
+cclass Bunny {
   constructor(x, y) {
-    // individuality
+    // sex, name
     this.sex = random() > 0.5 ? 'male' : 'female';
     if (this.sex == 'female') {
       this.colour = 255; // all females have white fur
       this.names = ['Louise', 'Beatrice', 'Diane', 'Jane', 'Helen', 'Emma'];
+
     } else {
       this.colour = map(random(), 0, 1, 80, 150); // males have a greyish fur
       this.names = ['Roger', 'Michael', 'Robert', 'Eugene', 'Louis', 'Arthur'];
+
     }
     this.name = this.names[Math.floor(Math.random() * this.names.length)];
 
@@ -16,23 +18,38 @@ class Bunny {
     this.vel = createVector();
     this.acc = createVector();
 
-    // qualities
+    // actions
     this.running = false;
+    this.drinking = false;
+    this.reproducing = false;
+
+    // needs
+    this.hunger = random(25);
+    this.thirst = random(25);
+    this.lust = random(25);
+
+    // counters
+    this.timeAfterDeath = 0;
+    this.scaleFactor = 0.01;
+    this.gestationPeriod = 0;
+
+    // initial attributes
     this.state = 'roaming';
     this.faceDiameter = 40;
     this.sightDiameter = 150;
-    this.isDrinking = false;
-    this.hunger = random(25);
-    this.thirst = random(25);
     this.debug = false;
-    this.timeAfterDeath = 0;
-    this.scaleFactor = 0.01;
     this.adult = false;
+    this.pregnant = false;
   }
 
   show() {
     push();
-    fill(this.colour);
+    if (this.pregnant) {
+      fill(255, 0, 0);
+    } else {
+      fill(this.colour);
+    }
+
     translate(this.pos.x, this.pos.y);
     if (this.scaleFactor > 1)
       this.adult = true;
@@ -58,7 +75,10 @@ class Bunny {
     ellipse(2, 4, 4, 5);
 
     // eyes
-    fill(0);
+    if (this.state == 'horny')
+      fill(250, 4, 230);
+    else
+      fill(0);
     if (this.state != 'dead') {
       ellipse(-5, -5, 5);
       ellipse(5, -5, 5);
@@ -85,21 +105,45 @@ class Bunny {
       strokeWeight(1);
       circle(0, 0, this.sightDiameter);
       text(this.name, -15, -50);
-      // text('h:' + floor(this.hunger), this.pos.x - 20, this.pos.y + 30);
-      // text('t:' + floor(this.thirst), this.pos.x - 20, this.pos.y + 50);
-      text(this.state, -20, +50);
+      text(this.state, -20, 50);
     }
     if (!this.adult)
-      this.scaleFactor += 0.01;
+      this.scaleFactor += 0.001;
     pop();
   }
 
-  update(carrots, puddles) {
+  update(carrots, puddles, bunnies) {
     if (this.state != 'dead') {
       this.updateLevels();
       this.determineState();
       this.applyPhysics();
       this.moveAround();
+      this.giveBirth();
+
+      if (this.state == 'horny') {
+        for (let bunny of bunnies) {
+          let d = dist(this.pos.x, this.pos.y, bunny.pos.x, bunny.pos.y);
+          if (d < 0.5 * (this.sightDiameter + bunny.sightDiameter)) {
+            let matingConditions = (this.sex != bunny.sex && bunny.state == 'horny' && !bunny.reproducing && !bunny.pregnant);
+            if (matingConditions) {
+              this.reproducing = true;
+              if (this.debug)
+                line(this.pos.x, this.pos.y, bunny.pos.x, bunny.pos.y);
+              bunny.vel.mult(0);
+              this.moveTowards(bunny.pos);
+              let mom = (this.sex == 'female') ? this : bunny;
+              if (d < 5) {
+                this.vel.mult(0);
+                setTimeout(() => {
+                  this.lust = 0;
+                  mom.pregnant = true;
+                  this.reproducing = false;
+                }, 3000);
+              }
+            }
+          }
+        }
+      }
 
       if (this.state == 'hungry') {
         // detect closest carrot
@@ -144,10 +188,10 @@ class Bunny {
 
             if (d < this.faceDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
               this.vel.mult(0);
-              this.isDrinking = true;
+              this.drinking = true;
               setTimeout(() => {
                 this.thirst = 0;
-                this.isDrinking = false;
+                this.drinking = false;
               }, 3000);
             } else {
               this.moveTowards(puddle.pos);
@@ -168,20 +212,27 @@ class Bunny {
       this.timeAfterDeath += 0.1;
     }
 
-    if (this.hunger == 100 || this.thirst == 100) {
+    if (this.hunger == 200 || this.thirst == 200) {
       this.state = 'dead';
     }
   }
   updateLevels() {
-    if (!this.isDrinking)
+    if (!this.drinking && !this.reproducing)
       this.thirst += 0.1;
-    this.thirst = constrain(this.thirst, 0, 100);
-    this.hunger += 0.1;
-    this.hunger = constrain(this.hunger, 0, 100);
+    this.thirst = constrain(this.thirst, 0, 200);
+    if (!this.reproducing)
+      this.hunger += 0.1;
+    this.hunger = constrain(this.hunger, 0, 200);
+    if (this.adult)
+      this.lust += 0.1;
+    this.lust = constrain(this.lust, 0, 100);
   }
   determineState() {
-    if (this.thirst < 50 && this.hunger < 50) {
+    if (this.thirst < 50 && this.hunger < 50) { //there it is
       this.state = 'roaming';
+      if (this.lust > 50 && !this.pregnant) {
+        this.state = 'horny';
+      }
     } else {
       let maximum = Math.max(this.hunger, this.thirst);
       if (maximum > 50) {
@@ -189,6 +240,20 @@ class Bunny {
           this.state = 'hungry';
         } else if (maximum == this.thirst) {
           this.state = 'thirsty';
+        }
+      }
+    }
+  }
+  giveBirth() {
+    if (this.pregnant) {
+      this.gestationPeriod += 0.1;
+      if (this.gestationPeriod > 50) {
+        this.pregnant = false;
+        this.gestationPeriod = 0;
+
+        let rng = floor(random(3) + 1); // 1, 2 or 3 babies per bunny
+        for (let i = 0; i < rng; i++) {
+          bunnies.push(new Bunny(this.pos.x, this.pos.y));
         }
       }
     }
