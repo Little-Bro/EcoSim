@@ -7,7 +7,6 @@ class Fox extends Animal {
   show() {
     push();
     translate(this.pos.x, this.pos.y);
-
     let len = 30;
     // face
     let c = createVector(width / 2, height / 2);

@@ -62,6 +62,15 @@ function draw() {
   for (let carrot of carrots) {
     carrot.show();
   }
+  for (let bunny of bunnies) {
+    bunny.show();
+    bunny.update(carrots, puddles, bunnies);
+    bunny.giveBirth(bunnies);
+    if (bunny.timeAfterDeath > 30) {
+      let index = bunnies.indexOf(bunny);
+      bunnies.splice(index, 1);
+    }
+  }
   for (let fox of foxes) {
     fox.show();
     fox.update(bunnies, puddles, foxes);
@@ -72,15 +81,6 @@ function draw() {
     }
   }
 
-  for (let bunny of bunnies) {
-    bunny.show();
-    bunny.update(carrots, puddles, bunnies);
-    bunny.giveBirth(bunnies);
-    if (bunny.timeAfterDeath > 30) {
-      let index = bunnies.indexOf(bunny);
-      bunnies.splice(index, 1);
-    }
-  }
 }
 
 // avoid things from spawning in puddles

@@ -87,7 +87,8 @@ class Animal {
         if (closest) {
           let index = food.indexOf(closest);
           let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-          if (d < closest.diameter / 2 + this.sightDiameter / 2) {
+          let diameter = food == carrots ? closest.diamter : closest.faceDiameter;
+          if (d < diameter / 2 + this.sightDiameter / 2) {
             if (this.debug)
               line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
             this.moveTowards(closest.pos);
@@ -95,13 +96,15 @@ class Animal {
               food.splice(index, 1);
               this.hunger = 0;
               // CARROTS RESPAWN BUT BUNNIES DO NOT
-              // setTimeout(() => {
-              //   let carrot;
-              //   while (carrot == undefined) {
-              //     carrot = validEntity('carrot');
-              //   }
-              //   carrots.push(carrot);
-              // }, 3000); // another carrot spawns three seconds later
+              if (food == carrots) {
+                setTimeout(() => {
+                  let carrot;
+                  while (carrot == undefined) {
+                    carrot = validEntity('carrot');
+                  }
+                  carrots.push(carrot);
+                }, 3000); // another carrot spawns three seconds later
+              }
             }
           }
         }
