@@ -87,7 +87,7 @@ class Animal {
         if (closest) {
           let index = food.indexOf(closest);
           let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-          let diameter = food == carrots ? closest.diamter : closest.faceDiameter;
+          let diameter = food == carrots ? 10 : closest.faceDiameter;
           if (d < diameter / 2 + this.sightDiameter / 2) {
             if (this.debug)
               line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
@@ -95,7 +95,6 @@ class Animal {
             if (d < 1) {
               food.splice(index, 1);
               this.hunger = 0;
-              // CARROTS RESPAWN BUT BUNNIES DO NOT
               if (food == carrots) {
                 setTimeout(() => {
                   let carrot;
@@ -159,7 +158,7 @@ class Animal {
     this.lust = constrain(this.lust, 0, 100);
   }
   determineState() {
-    if (this.thirst < 50 && this.hunger < 50) { //there it is
+    if (this.thirst < 50 && this.hunger < 50) {
       this.state = 'roaming';
       if (this.lust > 50 && !this.pregnant) {
         this.state = 'horny';
@@ -187,7 +186,7 @@ class Animal {
           for (let i = 0; i < rng; i++) {
             species.push(new Bunny(this.pos.x, this.pos.y));
           }
-        } else if (species == foxes) {
+        } else if (species == foxes) { // foxes have 1 baby at a time
           species.push(new Fox(this.pos.x, this.pos.y));
         }
       }

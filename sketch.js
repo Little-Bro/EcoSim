@@ -27,13 +27,13 @@ function setup() {
   puddles.push(puddle1);
   puddles.push(puddle2);
 
-  while (bunnies.length < 5) {
+  while (bunnies.length < 15) {
     let bunny = validEntity('bunny');
     if (bunny != undefined)
       bunnies.push(bunny);
   }
 
-  while (foxes.length < 3) {
+  while (foxes.length < 1) {
     let fox = validEntity('fox');
     if (fox != undefined)
       foxes.push(fox);
