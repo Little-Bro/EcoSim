@@ -39,113 +39,23 @@ class Animal {
     this.pregnant = false;
   }
 
+  // this function is executed each frame
   update(food, puddles, species) {
     if (this.state != 'dead') {
       this.updateLevels();
       this.determineState();
       this.applyPhysics();
       this.moveAround();
-      this.giveBirth();
-
-      if (this.state == 'horny') {
-        for (let member of species) {
-          let d = dist(this.pos.x, this.pos.y, member.pos.x, member.pos.y);
-          if (d < 0.5 * (this.sightDiameter + member.sightDiameter)) {
-            let matingConditions = (this.sex != member.sex && member.state == 'horny' && !member.reproducing && !member.pregnant);
-            if (matingConditions) {
-              this.reproducing = true;
-              if (this.debug)
-                line(this.pos.x, this.pos.y, member.pos.x, member.pos.y);
-              member.vel.mult(0);
-              this.moveTowards(member.pos);
-              let mom = (this.sex == 'female') ? this : member;
-              if (d < 5) {
-                this.vel.mult(0);
-                setTimeout(() => {
-                  this.lust = 0;
-                  mom.pregnant = true;
-                  this.reproducing = false;
-                }, 3000);
-              }
-            }
-          }
-        }
-      }
-
-      if (this.state == 'hungry') {
-        // detect closest food
-        let closest = null;
-        let record = Infinity;
-        for (let i = 0; i < food.length; i++) {
-          let d = dist(this.pos.x, this.pos.y, food[i].pos.x, food[i].pos.y);
-          if (d < record) {
-            record = d;
-            closest = food[i];
-          }
-        }
-        // does the animal see the food ? if so, it moves towards it
-        if (closest) {
-          let index = food.indexOf(closest);
-          let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-          let diameter = food == carrots ? 10 : closest.faceDiameter;
-          if (d < diameter / 2 + this.sightDiameter / 2) {
-            if (this.debug)
-              line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-            this.moveTowards(closest.pos);
-            if (d < 1) {
-              food.splice(index, 1);
-              this.hunger = 0;
-              if (food == carrots) {
-                setTimeout(() => {
-                  let carrot;
-                  while (carrot == undefined) {
-                    carrot = validEntity('carrot');
-                  }
-                  carrots.push(carrot);
-                }, 3000); // another carrot spawns three seconds later
-              }
-            }
-          }
-        }
-      }
-
-      if (this.state == 'thirsty') {
-        for (let puddle of puddles) {
-          let d = dist(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
-          if (d < this.sightDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
-            if (this.debug)
-              line(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
-
-            if (d < this.faceDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
-              this.vel.mult(0);
-              this.drinking = true;
-              setTimeout(() => {
-                this.thirst = 0;
-                this.drinking = false;
-              }, 3000);
-            } else {
-              this.moveTowards(puddle.pos);
-            }
-          }
-        }
-      } else if (this.state != 'thirsty') {
-        // bouncing off water
-        for (let puddle of puddles) {
-          let d = dist(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
-          if (d < this.faceDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
-            let force = p5.Vector.sub(puddle.pos, this.pos);
-            this.applyForce(force.normalize().mult(-1));
-          }
-        }
-      }
-    } else {
-      this.timeAfterDeath += 0.1;
+      this.manageHornyState(species);
+      this.manageHungryState(food);
+      this.manageThirstyState(puddles);
     }
-
     if (this.hunger == 200 || this.thirst == 200) {
       this.state = 'dead';
+      this.timeAfterDeath += 0.1;
     }
   }
+
   updateLevels() {
     if (!this.drinking && !this.reproducing)
       this.thirst += 0.1;
@@ -157,6 +67,7 @@ class Animal {
       this.lust += 0.1;
     this.lust = constrain(this.lust, 0, 100);
   }
+
   determineState() {
     if (this.thirst < 50 && this.hunger < 50) {
       this.state = 'roaming';
@@ -174,6 +85,7 @@ class Animal {
       }
     }
   }
+
   giveBirth(species) {
     if (this.pregnant) {
       this.gestationPeriod += 0.1;
@@ -192,12 +104,14 @@ class Animal {
       }
     }
   }
+
   applyPhysics() {
     this.vel.add(this.acc);
     this.pos.add(this.vel);
     this.acc.mult(0);
     this.vel.limit(2);
   }
+
   moveAround() {
     // Lévy Flight
     let rng = random(100);
@@ -226,6 +140,7 @@ class Animal {
     else if (this.pos.y > height)
       this.pos.y = 0;
   }
+
   moveTowards(targetPos) {
     let force = p5.Vector.sub(targetPos, this.pos);
     let distance = force.mag();
@@ -233,7 +148,106 @@ class Animal {
     force.mult(0.5);
     this.applyForce(force);
   }
+
   applyForce(force) {
     this.acc.add(force);
+  }
+
+  manageHornyState(species) {
+    if (this.state == 'horny') {
+      for (let member of species) {
+        let d = dist(this.pos.x, this.pos.y, member.pos.x, member.pos.y);
+        if (d < 0.5 * (this.sightDiameter + member.sightDiameter)) {
+          let matingConditions = (this.sex != member.sex && member.state == 'horny' && !member.reproducing && !member.pregnant);
+          if (matingConditions) {
+            this.reproducing = true;
+            if (this.debug)
+              line(this.pos.x, this.pos.y, member.pos.x, member.pos.y);
+            member.vel.mult(0);
+            this.moveTowards(member.pos);
+            let mom = (this.sex == 'female') ? this : member;
+            if (d < 5) {
+              this.vel.mult(0);
+              setTimeout(() => {
+                this.lust = 0;
+                mom.pregnant = true;
+                this.reproducing = false;
+              }, 3000);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  manageHungryState(food) {
+    if (this.state == 'hungry') {
+      // detect closest food
+      let closest = null;
+      let record = Infinity;
+      for (let i = 0; i < food.length; i++) {
+        let d = dist(this.pos.x, this.pos.y, food[i].pos.x, food[i].pos.y);
+        if (d < record) {
+          record = d;
+          closest = food[i];
+        }
+      }
+      // does the animal see the food ? if so, it moves towards it
+      if (closest) {
+        let index = food.indexOf(closest);
+        let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+        let diameter = food == carrots ? 10 : closest.faceDiameter;
+        if (d < diameter / 2 + this.sightDiameter / 2) {
+          if (this.debug)
+            line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+          this.moveTowards(closest.pos);
+          if (d < 1) {
+            food.splice(index, 1);
+            this.hunger = 0;
+            if (food == carrots) {
+              setTimeout(() => {
+                let carrot;
+                while (carrot == undefined) {
+                  carrot = validEntity('carrot');
+                }
+                carrots.push(carrot);
+              }, 3000); // another carrot spawns three seconds later
+            }
+          }
+        }
+      }
+    }
+  }
+
+  manageThirstyState(puddles) {
+    if (this.state == 'thirsty') {
+      for (let puddle of puddles) {
+        let d = dist(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
+        if (d < this.sightDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
+          if (this.debug)
+            line(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
+
+          if (d < this.faceDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
+            this.vel.mult(0);
+            this.drinking = true;
+            setTimeout(() => {
+              this.thirst = 0;
+              this.drinking = false;
+            }, 3000);
+          } else {
+            this.moveTowards(puddle.pos);
+          }
+        }
+      }
+    } else if (this.state != 'thirsty') {
+      // bouncing off water
+      for (let puddle of puddles) {
+        let d = dist(this.pos.x, this.pos.y, puddle.pos.x, puddle.pos.y);
+        if (d < this.faceDiameter * 0.5 + 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
+          let force = p5.Vector.sub(puddle.pos, this.pos);
+          this.applyForce(force.normalize().mult(-1));
+        }
+      }
+    }
   }
 }
