@@ -33,7 +33,7 @@ function setup() {
       bunnies.push(bunny);
   }
 
-  while (foxes.length < 1) {
+  while (foxes.length < 3) {
     let fox = validEntity('fox');
     if (fox != undefined)
       foxes.push(fox);

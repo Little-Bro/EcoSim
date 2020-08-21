@@ -27,7 +27,7 @@ class Animal {
 
     // counters
     this.timeAfterDeath = 0;
-    this.scaleFactor = 0.01;
+    this.scaleFactor = 0.3;
     this.gestationPeriod = 0;
 
     // initial attributes
