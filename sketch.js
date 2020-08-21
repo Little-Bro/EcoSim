@@ -1,4 +1,5 @@
 let bunnies = [];
+let foxes = [];
 let carrots = [];
 let puddles = [];
 let debugCheckBox;
@@ -32,6 +33,12 @@ function setup() {
       bunnies.push(bunny);
   }
 
+  while (foxes.length < 3) {
+    let fox = validEntity('fox');
+    if (fox != undefined)
+      foxes.push(fox);
+  }
+
   // forcing first gen of bunnies to be adults
   for (const bunny of bunnies) {
     bunny.adult = true;
@@ -55,6 +62,16 @@ function draw() {
   for (let carrot of carrots) {
     carrot.show();
   }
+  for (let fox of foxes) {
+    fox.show();
+    fox.update(bunnies, puddles, foxes);
+    fox.giveBirth(foxes);
+    if (fox.timeAfterDeath > 30) {
+      let index = foxes.indexOf(fox);
+      foxes.splice(index, 1);
+    }
+  }
+
   for (let bunny of bunnies) {
     bunny.show();
     bunny.update(carrots, puddles, bunnies);
@@ -84,6 +101,8 @@ function validEntity(entity) {
       return new Bunny(x, y);
     } else if (entity == 'carrot') {
       return new Carrot(x, y);
+    } else if (entity == 'fox') {
+      return new Fox(x, y);
     }
   } else {
     return undefined;
@@ -96,6 +115,12 @@ function clicked() {
       bunny.debug = true;
     else
       bunny.debug = false;
+  }
+  for (let fox of foxes) {
+    if (this.checked())
+      fox.debug = true;
+    else
+      fox.debug = false;
   }
   for (let puddle of puddles) {
     if (this.checked())

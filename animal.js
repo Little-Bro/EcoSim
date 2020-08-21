@@ -73,7 +73,7 @@ class Animal {
       }
 
       if (this.state == 'hungry') {
-        // detect closest carrot
+        // detect closest food
         let closest = null;
         let record = Infinity;
         for (let i = 0; i < food.length; i++) {
@@ -83,7 +83,7 @@ class Animal {
             closest = food[i];
           }
         }
-        // does the bunny see the closest carrot ? If so, it moves towards it
+        // does the animal see the food ? if so, it moves towards it
         if (closest) {
           let index = food.indexOf(closest);
           let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
@@ -184,6 +184,8 @@ class Animal {
           for (let i = 0; i < rng; i++) {
             species.push(new Bunny(this.pos.x, this.pos.y));
           }
+        } else if (species == foxes) {
+          species.push(new Fox(this.pos.x, this.pos.y));
         }
       }
     }
