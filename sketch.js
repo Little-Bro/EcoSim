@@ -58,6 +58,7 @@ function draw() {
   for (let bunny of bunnies) {
     bunny.show();
     bunny.update(carrots, puddles, bunnies);
+    bunny.giveBirth(bunnies);
     if (bunny.timeAfterDeath > 30) {
       let index = bunnies.indexOf(bunny);
       bunnies.splice(index, 1);

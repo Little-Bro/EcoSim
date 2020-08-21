@@ -3,13 +3,10 @@ class Animal {
     // sex, name
     this.sex = random() > 0.5 ? 'male' : 'female';
     if (this.sex == 'female') {
-      //this.colour = 255; // all females have white fur
       this.names = ['Louise', 'Beatrice', 'Diane', 'Jane', 'Helen', 'Emma'];
 
     } else {
-      //this.colour = map(random(), 0, 1, 80, 150); // males have a greyish fur
       this.names = ['Roger', 'Michael', 'Robert', 'Eugene', 'Louis', 'Arthur'];
-
     }
     this.name = this.names[Math.floor(Math.random() * this.names.length)];
 
@@ -40,9 +37,6 @@ class Animal {
     this.debug = false;
     this.adult = false;
     this.pregnant = false;
-  }
-
-  show() {
   }
 
   update(food, puddles, species) {
@@ -89,7 +83,7 @@ class Animal {
             closest = food[i];
           }
         }
-        // does the animal see the closest food source ? If so, it moves towards it
+        // does the bunny see the closest carrot ? If so, it moves towards it
         if (closest) {
           let index = food.indexOf(closest);
           let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
@@ -100,13 +94,13 @@ class Animal {
             if (d < 1) {
               food.splice(index, 1);
               this.hunger = 0;
-              // CARROTS RESPAWN BUT BUNNIES DON'T
-              setTimeout(() => {
+              // CARROTS RESPAWN BUT BUNNIES DO NOT
+              // setTimeout(() => {
               //   let carrot;
               //   while (carrot == undefined) {
               //     carrot = validEntity('carrot');
               //   }
-              //   food.push(carrot);
+              //   carrots.push(carrot);
               // }, 3000); // another carrot spawns three seconds later
             }
           }
@@ -178,7 +172,7 @@ class Animal {
       }
     }
   }
-  giveBirth() {
+  giveBirth(species) {
     if (this.pregnant) {
       this.gestationPeriod += 0.1;
       if (this.gestationPeriod > 50) {
@@ -186,8 +180,10 @@ class Animal {
         this.gestationPeriod = 0;
 
         let rng = floor(random(3) + 1); // 1, 2 or 3 babies per bunny
-        for (let i = 0; i < rng; i++) {
-          species.push(new Bunny(this.pos.x, this.pos.y));
+        if (species == bunnies) {
+          for (let i = 0; i < rng; i++) {
+            species.push(new Bunny(this.pos.x, this.pos.y));
+          }
         }
       }
     }
