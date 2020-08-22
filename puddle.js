@@ -6,7 +6,6 @@ class Puddle {
     this.vertices = [];
     this.min = min;
     this.max = max;
-    this.debug = false;
 
     // generating vertices
     let i = 0;
@@ -27,6 +26,7 @@ class Puddle {
       this.vertices[i].add(diff);
     }
   }
+
   show() {
     push();
     fill(40, 175, 200);
@@ -37,9 +37,5 @@ class Puddle {
     }
     endShape(CLOSE);
     pop();
-    if (this.debug) {
-      noFill();
-      circle(this.pos.x, this.pos.y, this.radius + (this.min + this.max) * 0.5);
-    }
   }
 }

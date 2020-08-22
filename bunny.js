@@ -6,6 +6,7 @@ class Bunny extends Animal {
     else
       this.colour = map(random(), 0, 1, 80, 150); // males have a greyish fur
   }
+
   show() {
     push();
     if (this.pregnant) {

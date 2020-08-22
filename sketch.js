@@ -32,16 +32,15 @@ function setup() {
     if (bunny != undefined)
       bunnies.push(bunny);
   }
+  // forcing first gen of bunnies to be adults
+  for (const bunny of bunnies) {
+    bunny.adult = true;
+  }
 
   while (foxes.length < 3) {
     let fox = validEntity('fox');
     if (fox != undefined)
       foxes.push(fox);
-  }
-
-  // forcing first gen of bunnies to be adults
-  for (const bunny of bunnies) {
-    bunny.adult = true;
   }
 
   while (carrots.length < 30) {
@@ -80,10 +79,9 @@ function draw() {
       foxes.splice(index, 1);
     }
   }
-
 }
 
-// avoid things from spawning in puddles
+// avoiding things from spawning in puddles
 function validEntity(entity) {
   let x = random(50, width - 50);
   let y = random(50, height - 50);
@@ -97,18 +95,23 @@ function validEntity(entity) {
     }
   }
   if (valid) {
-    if (entity == 'bunny') {
-      return new Bunny(x, y);
-    } else if (entity == 'carrot') {
-      return new Carrot(x, y);
-    } else if (entity == 'fox') {
-      return new Fox(x, y);
+    switch (entity) {
+      case 'bunny':
+        return new Bunny(x, y);
+        break;
+      case 'carrot':
+        return new Carrot(x, y);
+        break;
+      case 'fox':
+        return new Fox(x, y);
+        break;
+      default:
+        return undefined;
     }
-  } else {
-    return undefined;
   }
 }
 
+// user clicks on debug checkbox
 function clicked() {
   for (let bunny of bunnies) {
     if (this.checked())
@@ -121,11 +124,5 @@ function clicked() {
       fox.debug = true;
     else
       fox.debug = false;
-  }
-  for (let puddle of puddles) {
-    if (this.checked())
-      puddle.debug = true;
-    else
-      puddle.debug = false;
   }
 }

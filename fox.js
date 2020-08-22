@@ -1,9 +1,8 @@
 class Fox extends Animal {
   constructor(x, y) {
     super(x, y);
-    this.len = 30;
-
   }
+
   show() {
     push();
     translate(this.pos.x, this.pos.y);
