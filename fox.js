@@ -24,8 +24,19 @@ class Fox extends Animal {
 
     // eyes
     fill(0);
-    circle(-10, -5, 5);
-    circle(10, -5, 5);
+    if (this.state != 'dead') {
+      circle(-10, -5, 5);
+      circle(10, -5, 5);
+    } else {
+      stroke(1);
+      // left eye
+      line(-12, -7, -8, -3);
+      line(-12, -3, -8, -7);
+      // right eye
+      line(12, -7, 8, -3);
+      line(12, -3, 8, -7);
+    }
+
 
     //moustache
     stroke(1);
