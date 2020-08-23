@@ -4,7 +4,8 @@ let carrots = [];
 let puddles = [];
 let debugCheckBox;
 let p1, p2, p3;
-let population;
+let bunnyPopulation;
+let foxPopulation;
 
 function setup() {
   createCanvas(700, 700);
@@ -15,11 +16,13 @@ function setup() {
   p1 = createP('female bunnies are white, males are grey-ish');
   p2 = createP('pregnant bunnies turn red');
   p3 = createP('bunnies with pink eyes want to mate');
-  population = createElement('h3');
   p1.position(720, 50);
   p2.position(720, 90);
   p3.position(720, 130);
-  population.position(720, 200);
+  bunnyPopulation = createElement('h3');
+  bunnyPopulation.position(720, 200);
+  foxPopulation = createElement('h3');
+  foxPopulation.position(720, 240);
 
   // generating puddles
   puddle1 = new Puddle(300, 200, 100, 150);
@@ -37,10 +40,14 @@ function setup() {
     bunny.adult = true;
   }
 
-  while (foxes.length < 3) {
+  while (foxes.length < 5) {
     let fox = validEntity('fox');
     if (fox != undefined)
       foxes.push(fox);
+  }
+  // forcing first gen of foxes to be adults
+  for (const fox of foxes) {
+    fox.adult = true;
   }
 
   while (carrots.length < 30) {
@@ -53,7 +60,8 @@ function setup() {
 function draw() {
   background(40, 195, 50);
 
-  population.html('population : ' + bunnies.length);
+  bunnyPopulation.html('bunny Population : ' + bunnies.length);
+  foxPopulation.html('fox Population : ' + foxes.length);
 
   for (let puddle of puddles) {
     puddle.show();

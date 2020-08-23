@@ -1,12 +1,20 @@
 class Fox extends Animal {
   constructor(x, y) {
     super(x, y);
+    this.adult = false;
   }
 
   show() {
     push();
     translate(this.pos.x, this.pos.y);
+    if (this.scaleFactor > 1)
+      this.adult = true;
+    if (this.adult)
+      this.scaleFactor = 1; // forcing 1st gen to be adults
+    scale(this.scaleFactor);
+
     let len = 30;
+
     // face
     let c = createVector(width / 2, height / 2);
     let p1 = createVector(-len, -len);
@@ -22,7 +30,10 @@ class Fox extends Animal {
     triangle(+len, -len, +(len - 5), -len - 20, +10, -len);
 
     // eyes
-    fill(0);
+    if (this.state == 'horny')
+      fill(250, 4, 230);
+    else
+      fill(0);
     if (this.state != 'dead') {
       circle(-10, -5, 5);
       circle(10, -5, 5);
@@ -39,6 +50,7 @@ class Fox extends Animal {
 
     //moustache
     stroke(1);
+    fill(0);
     let dy = -10;
     for (let i = 0; i < 3; i++) {
       dy += 5;
@@ -58,6 +70,8 @@ class Fox extends Animal {
       text(this.name, -15, -50);
       text(this.state, -20, 50);
     }
+    if (!this.adult)
+      this.scaleFactor += 0.001;
     pop();
   }
 }
