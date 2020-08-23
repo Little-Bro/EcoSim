@@ -63,15 +63,6 @@ class Bunny extends Animal {
     line(-10, 2, 10, 2);
     strokeWeight(1);
 
-    // debug info
-    noFill();
-    if (this.debug && this.state != 'dead') {
-      stroke(0);
-      strokeWeight(1);
-      circle(0, 0, this.sightDiameter);
-      text(this.name, -15, -50);
-      text(this.state, -20, 50);
-    }
     if (!this.adult)
       this.scaleFactor += 0.001;
     pop();

@@ -42,6 +42,7 @@ class Animal {
   // this function is executed each frame
   update(food, puddles, species) {
     if (this.state != 'dead') {
+      this.showDebug()
       this.updateLevels();
       this.determineState();
       this.applyPhysics();
@@ -248,6 +249,17 @@ class Animal {
           this.applyForce(force.normalize().mult(-1));
         }
       }
+    }
+  }
+  showDebug() {
+    // debug info
+    noFill();
+    if (this.debug && this.state != 'dead') {
+      stroke(0);
+      strokeWeight(1);
+      circle(this.pos.x, this.pos.y, this.sightDiameter);
+      text(this.name, this.pos.x - 15, this.pos.y - 50);
+      text(this.state, this.pos.x - 20, this.pos.y + 50);
     }
   }
 }

@@ -61,15 +61,6 @@ class Fox extends Animal {
     // nose
     circle(p3.x, p3.y - 2, 5);
 
-    // debug info
-    noFill();
-    if (this.debug && this.state != 'dead') {
-      stroke(0);
-      strokeWeight(1);
-      circle(0, 0, this.sightDiameter);
-      text(this.name, -15, -50);
-      text(this.state, -20, 50);
-    }
     if (!this.adult)
       this.scaleFactor += 0.001;
     pop();
