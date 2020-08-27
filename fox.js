@@ -47,7 +47,6 @@ class Fox extends Animal {
       line(12, -3, 8, -7);
     }
 
-
     //moustache
     stroke(1);
     fill(0);
