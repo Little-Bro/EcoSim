@@ -32,22 +32,18 @@ function setup() {
 
   while (bunnies.length < 15) {
     let bunny = validEntity('bunny');
-    if (bunny != undefined)
+    if (bunny != undefined) {
       bunnies.push(bunny);
-  }
-  // forcing first gen of bunnies to be adults
-  for (const bunny of bunnies) {
-    bunny.adult = true;
+      bunny.adult = true;
+    }
   }
 
-  while (foxes.length < 5) {
+  while (foxes.length < 3) {
     let fox = validEntity('fox');
-    if (fox != undefined)
+    if (fox != undefined) {
       foxes.push(fox);
-  }
-  // forcing first gen of foxes to be adults
-  for (const fox of foxes) {
-    fox.adult = true;
+      fox.adult = true;
+    }
   }
 
   while (carrots.length < 30) {
