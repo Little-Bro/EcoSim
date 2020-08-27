@@ -3,12 +3,12 @@ class Animal {
     // sex, name
     this.sex = random() > 0.5 ? 'male' : 'female';
     if (this.sex == 'female') {
-      this.names = ['Louise', 'Beatrice', 'Diane', 'Jane', 'Helen', 'Emma'];
+      this.names = ['Louise', 'Beatrice', 'Denise', 'Jeanne', 'Helene', 'Alice', 'Camille', 'Lucie'];
 
     } else {
-      this.names = ['Roger', 'Michael', 'Robert', 'Eugene', 'Louis', 'Arthur'];
+      this.names = ['Gerard', 'Denis', 'Roger', 'Edouard', 'Robert', 'Eugene', 'Louis', 'Didier'];
     }
-    this.name = this.names[Math.floor(Math.random() * this.names.length)];
+    this.name = this.names[floor(random() * this.names.length)];
 
     // physics
     this.pos = createVector(x, y);
