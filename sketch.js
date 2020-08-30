@@ -59,12 +59,14 @@ function draw() {
   bunnyPopulation.html('bunny Population : ' + bunnies.length);
   foxPopulation.html('fox Population : ' + foxes.length);
 
-  for (let puddle of puddles) {
+  puddles.forEach(puddle => {
     puddle.show();
-  }
-  for (let carrot of carrots) {
+  })
+
+  carrots.forEach(carrot => {
     carrot.show();
-  }
+  })
+
   for (let bunny of bunnies) {
     bunny.show();
     bunny.update(carrots, puddles, bunnies);
