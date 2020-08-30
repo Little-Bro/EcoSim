@@ -1,5 +1,4 @@
-let bunnies = [];
-let foxes = [];
+let animals = [];
 let carrots = [];
 let puddles = [];
 let debugCheckBox;
@@ -30,19 +29,30 @@ function setup() {
   puddles.push(puddle1);
   puddles.push(puddle2);
 
-  while (bunnies.length < 15) {
-    let bunny = validEntity('bunny');
-    if (bunny != undefined) {
-      bunnies.push(bunny);
-      bunny.adult = true;
-    }
-  }
+  const nBunnies = 15;
+  const nFoxes = 3;
 
-  while (foxes.length < 3) {
-    let fox = validEntity('fox');
-    if (fox != undefined) {
-      foxes.push(fox);
-      fox.adult = true;
+  for (let i = 0; i < nBunnies + nFoxes; i++) {
+    if (i < nBunnies) {
+      let bunny = validEntity('bunny');
+      if (bunny) {
+        bunny.adult = true;
+        bunny.species = 'bunnies';
+        bunny.food = 'carrots';
+        animals.push(bunny);
+      } else {
+        console.log('bunny spawned in water and drowned T-T');
+      }
+    } else if (i >= nBunnies && i < nFoxes + nBunnies) {
+      let fox = validEntity('fox');
+      if (fox) {
+        fox.adult = true;
+        fox.species = 'foxes';
+        fox.food = 'bunnies';
+        animals.push(fox);
+      } else {
+        console.log('fox spawned in water and drowned T-T');
+      }
     }
   }
 
@@ -56,8 +66,8 @@ function setup() {
 function draw() {
   background(40, 195, 50);
 
-  bunnyPopulation.html('bunny Population : ' + bunnies.length);
-  foxPopulation.html('fox Population : ' + foxes.length);
+  bunnyPopulation.html('bunny Population : ' + (animals.filter(animal => animal instanceof Bunny)).length);
+  foxPopulation.html('fox Population : ' + (animals.filter(animal => animal instanceof Fox)).length);
 
   puddles.forEach(puddle => {
     puddle.show();
@@ -67,22 +77,24 @@ function draw() {
     carrot.show();
   })
 
-  for (let bunny of bunnies) {
-    bunny.show();
-    bunny.update(carrots, puddles, bunnies);
-    bunny.giveBirth(bunnies);
-    if (bunny.timeAfterDeath > 30) {
-      let index = bunnies.indexOf(bunny);
-      bunnies.splice(index, 1);
+  for (let animal of animals) {
+    let species = [];
+    let food = [];
+    if (animal instanceof Fox) {
+      species = animals.filter(animal => animal instanceof Fox);
+      food = animals.filter(animal => animal instanceof Bunny);
+    } else {
+      species = animals.filter(animal => animal instanceof Bunny);
+      food = carrots;
     }
-  }
-  for (let fox of foxes) {
-    fox.show();
-    fox.update(bunnies, puddles, foxes);
-    fox.giveBirth(foxes);
-    if (fox.timeAfterDeath > 30) {
-      let index = foxes.indexOf(fox);
-      foxes.splice(index, 1);
+    animal.show();
+    animal.manageHungryState(food);
+    animal.manageHornyState(species);
+    animal.giveBirth(species);
+    animal.update(puddles);
+    if (animal.timeAfterDeath > 30) {
+      let index = animals.indexOf(animal);
+      animals.splice(index, 1);
     }
   }
 }

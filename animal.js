@@ -31,6 +31,7 @@ class Animal {
     this.gestationPeriod = 0;
 
     // initial attributes
+    this.species = '';
     this.state = 'roaming';
     this.faceDiameter = 40;
     this.sightDiameter = 150;
@@ -40,15 +41,13 @@ class Animal {
   }
 
   // this function is executed each frame
-  update(food, puddles, species) {
+  update(puddles) {
     if (this.state != 'dead') {
       this.showDebug()
       this.updateLevels();
       this.determineState();
       this.applyPhysics();
       this.moveAround();
-      this.manageHornyState(species);
-      this.manageHungryState(food);
       this.manageThirstyState(puddles);
     }
     if (this.hunger == 200 || this.thirst == 200) {
@@ -95,12 +94,12 @@ class Animal {
         this.gestationPeriod = 0;
 
         let rng = floor(random(3) + 1); // 1, 2 or 3 babies per bunny
-        if (species == bunnies) {
+        if (this.species == 'bunnies') {
           for (let i = 0; i < rng; i++) {
-            species.push(new Bunny(this.pos.x, this.pos.y));
+            animals.push(new Bunny(this.pos.x, this.pos.y));
           }
-        } else if (species == foxes) { // foxes have 1 baby at a time
-          species.push(new Fox(this.pos.x, this.pos.y));
+        } else if (this.species == 'foxes') { // foxes have 1 baby at a time
+          animals.push(new Fox(this.pos.x, this.pos.y));
         }
       }
     }

@@ -30,16 +30,10 @@ function validEntity(entity) {
 
 // user clicks on debug checkbox
 function clicked() {
-  for (let bunny of bunnies) {
+  for (const animal of animals) {
     if (this.checked())
-      bunny.debug = true;
+      animal.debug = true;
     else
-      bunny.debug = false;
-  }
-  for (let fox of foxes) {
-    if (this.checked())
-      fox.debug = true;
-    else
-      fox.debug = false;
+      animal.debug = false;
   }
 }
