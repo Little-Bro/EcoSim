@@ -4,7 +4,6 @@ class Animal {
     this.sex = random() > 0.5 ? 'male' : 'female';
     if (this.sex == 'female') {
       this.names = ['Louise', 'Beatrice', 'Denise', 'Jeanne', 'Helene', 'Alice', 'Camille', 'Lucie'];
-
     } else {
       this.names = ['Gerard', 'Denis', 'Roger', 'Edouard', 'Robert', 'Eugene', 'Louis', 'Didier'];
     }
@@ -86,7 +85,7 @@ class Animal {
     }
   }
 
-  giveBirth(species) {
+  giveBirth() {
     if (this.pregnant) {
       this.gestationPeriod += 0.1;
       if (this.gestationPeriod > 50) {

@@ -90,8 +90,8 @@ function draw() {
     animal.show();
     animal.manageHungryState(food);
     animal.manageHornyState(species);
-    animal.giveBirth(species);
     animal.update(puddles);
+    animal.giveBirth();
     if (animal.timeAfterDeath > 30) {
       let index = animals.indexOf(animal);
       animals.splice(index, 1);
