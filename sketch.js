@@ -38,7 +38,6 @@ function setup() {
       if (bunny) {
         bunny.adult = true;
         bunny.species = 'bunnies';
-        // bunny.food = 'carrots';
         animals.push(bunny);
       } else {
         console.log('bunny spawned in water and drowned T-T');
@@ -48,7 +47,6 @@ function setup() {
       if (fox) {
         fox.adult = true;
         fox.species = 'foxes';
-        fox.food = 'bunnies';
         animals.push(fox);
       } else {
         console.log('fox spawned in water and drowned T-T');
