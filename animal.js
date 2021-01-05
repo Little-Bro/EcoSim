@@ -211,6 +211,9 @@ class Animal {
                 }
                 carrots.push(carrot);
               }, 3000); // another carrot spawns three seconds later
+            } else {
+              // le lapin se fait manger
+              closest.timeAfterDeath = 31;
             }
           }
         }
