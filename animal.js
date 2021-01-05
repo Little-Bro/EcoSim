@@ -195,7 +195,7 @@ class Animal {
       if (closest) {
         let index = food.indexOf(closest);
         let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-        let diameter = food == carrots ? 10 : closest.faceDiameter;
+        let diameter = food == carrots ? 20 : closest.faceDiameter;
         if (d < diameter / 2 + this.sightDiameter / 2) {
           if (this.debug)
             line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);

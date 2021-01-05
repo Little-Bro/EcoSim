@@ -56,7 +56,7 @@ function setup() {
     }
   }
 
-  while (carrots.length < 30) {
+  while (carrots.length < 15) {
     let carrot = validEntity('carrot');
     if (carrot != undefined)
       carrots.push(carrot);
