@@ -1,5 +1,9 @@
 # EcoSim
-Very basic ecosystem simulation : prey (bunny) / predator (fox).
+
+This project is hosted on github pages ! 
+Here it is ! -> https://little-bro.github.io/EcoSim/
+
+It is a very basic ecosystem simulation : prey (bunny) / predator (fox).
 I would like to end up with something similar to a genetic algorithm and try to reproduce the 'survival of the fittest' model observed in nature.
 
 It's a p5.js holiday project inspired by Sebastian Lague's video : https://www.youtube.com/watch?v=r_It_X7v-1E  
