@@ -5,6 +5,7 @@ let debugCheckBox;
 let p1, p2, p3;
 let bunnyPopulation;
 let foxPopulation;
+let createFoxButton, createBunnyButton;
 
 function setup() {
   createCanvas(700, 700);
@@ -22,6 +23,31 @@ function setup() {
   bunnyPopulation.position(720, 200);
   foxPopulation = createElement('h3');
   foxPopulation.position(720, 240);
+  // buttons
+  createFoxButton = createButton('Add a new fox');
+  createFoxButton.position(720, 300);
+  createFoxButton.mousePressed(() => {
+    let fox = validEntity('fox');
+    if (fox) {
+      fox.adult = true;
+      fox.species = 'foxes';
+      animals.push(fox);
+    } else {
+      console.log('fox spawned in water and drowned T-T');
+    }
+  });
+  createBunnyButton = createButton('Add a new bunny');
+  createBunnyButton.position(830, 300);
+  createBunnyButton.mousePressed(() => {
+    let bunny = validEntity('bunny');
+    if (bunny) {
+      bunny.adult = true;
+      bunny.species = 'bunnies';
+      animals.push(bunny);
+    } else {
+      console.log('bunny spawned in water and drowned T-T');
+    }
+  });
 
   // generating puddles
   puddle1 = new Puddle(300, 200, 100, 150);

@@ -218,7 +218,6 @@ class Animal {
     if (this.state == 'hungry') {
       // detect closest food
       let closest = this.detectClosest(food);
-
       // does the animal see the food ? if so, it moves towards it
       if (closest) {
         let index = food.indexOf(closest);
