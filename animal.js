@@ -148,6 +148,35 @@ class Animal {
     this.applyForce(force);
   }
 
+  runAwayFrom(foxes) {
+    // detect closest fox
+    let closest = null;
+    let record = Infinity;
+    for (let i = 0; i < foxes.length; i++) {
+      let d = dist(this.pos.x, this.pos.y, foxes[i].pos.x, foxes[i].pos.y);
+      if (d < record) {
+        record = d;
+        closest = foxes[i];
+      }
+    }
+    // run away from closest fox
+    if (closest) {
+      let index = foxes.indexOf(closest);
+      let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+      let diameter = closest.faceDiameter;
+      if (d < diameter / 2 + this.sightDiameter / 2) {
+        if (this.debug)
+          line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
+        // physics
+        let force = p5.Vector.sub(closest.pos, this.pos);
+        let distance = force.mag();
+        force.normalize();
+        force.mult(-0.3);
+        this.applyForce(force);
+      }
+    }
+  }
+
   applyForce(force) {
     this.acc.add(force);
   }
@@ -212,7 +241,7 @@ class Animal {
                 carrots.push(carrot);
               }, 3000); // another carrot spawns three seconds later
             } else {
-              // le lapin se fait manger
+              // bunny dies and vanishes instantly
               closest.timeAfterDeath = 31;
             }
           }

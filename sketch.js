@@ -29,6 +29,7 @@ function setup() {
   puddles.push(puddle1);
   puddles.push(puddle2);
 
+  // generating bunnies and foxes
   const nBunnies = 15;
   const nFoxes = 3;
 
@@ -54,6 +55,7 @@ function setup() {
     }
   }
 
+  // generating carrots
   while (carrots.length < 15) {
     let carrot = validEntity('carrot');
     if (carrot != undefined)
@@ -62,7 +64,7 @@ function setup() {
 }
 
 function draw() {
-  background(40, 195, 50);
+  background(30, 190, 30);
 
   bunnyPopulation.html('bunny Population : ' + (animals.filter(animal => animal instanceof Bunny)).length);
   foxPopulation.html('fox Population : ' + (animals.filter(animal => animal instanceof Fox)).length);
@@ -90,6 +92,9 @@ function draw() {
     animal.manageHornyState(species);
     animal.update(puddles);
     animal.giveBirth();
+    if (animal.species == 'bunnies') {
+      animal.runAwayFrom(animals.filter(animal => animal instanceof Fox));
+    }
     if (animal.timeAfterDeath > 30) {
       let index = animals.indexOf(animal);
       animals.splice(index, 1);
