@@ -17,5 +17,5 @@ They are hungry, thirsty, and horny and will either seek food, water or a mate a
 
 Bunnies run away from the foxes when they see them.
 
-I would like to add 'genes' which an animal could pass on to its offspring. The children will inherit the genes from their mother or their father with equal probability and each gene will have a slight chance of mutating (thereby increasing or decreasing the associated variable).
-These genes would affect the animal's attractiveness, speed, gestation period and sight diameter.
+Animals have'genes' which they can pass on to their offspring. The children will inherit the genes from their mother or their father with equal probability and each gene will have a slight chance of mutating (thereby increasing or decreasing the associated variable).
+These genes affect the animal's speed, gestation period and sight diameter.
