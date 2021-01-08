@@ -148,17 +148,22 @@ class Animal {
     this.applyForce(force);
   }
 
-  runAwayFrom(foxes) {
-    // detect closest fox
+  detectClosest(array) {
     let closest = null;
     let record = Infinity;
-    for (let i = 0; i < foxes.length; i++) {
-      let d = dist(this.pos.x, this.pos.y, foxes[i].pos.x, foxes[i].pos.y);
+    for (let i = 0; i < array.length; i++) {
+      let d = dist(this.pos.x, this.pos.y, array[i].pos.x, array[i].pos.y);
       if (d < record) {
         record = d;
-        closest = foxes[i];
+        closest = array[i];
       }
     }
+    return closest;
+  }
+
+  runAwayFrom(foxes) {
+    // detect closest fox
+    let closest = this.detectClosest(foxes);
     // run away from closest fox
     if (closest) {
       let index = foxes.indexOf(closest);
@@ -211,15 +216,8 @@ class Animal {
   manageHungryState(food) {
     if (this.state == 'hungry') {
       // detect closest food
-      let closest = null;
-      let record = Infinity;
-      for (let i = 0; i < food.length; i++) {
-        let d = dist(this.pos.x, this.pos.y, food[i].pos.x, food[i].pos.y);
-        if (d < record) {
-          record = d;
-          closest = food[i];
-        }
-      }
+      let closest = this.detectClosest(food);
+
       // does the animal see the food ? if so, it moves towards it
       if (closest) {
         let index = food.indexOf(closest);
