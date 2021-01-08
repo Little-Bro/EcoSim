@@ -2,30 +2,31 @@ let animals = [];
 let carrots = [];
 let puddles = [];
 let debugCheckBox;
-let p1, p2, p3;
+// let p1, p2, p3;
 let bunnyPopulation;
 let foxPopulation;
 let createFoxButton, createBunnyButton;
 
 function setup() {
-  createCanvas(700, 700);
+  createCanvas(800, 700);
+  //createCanvas(windowWidth, windowHeight);
   // html
   debugCheckBox = createCheckbox('Show debug info', false);
   debugCheckBox.changed(clicked);
-  debugCheckBox.position(450, 20);
-  p1 = createP('female bunnies are white, males are grey-ish');
-  p2 = createP('pregnant bunnies turn red');
-  p3 = createP('bunnies with pink eyes want to mate');
-  p1.position(720, 50);
-  p2.position(720, 90);
-  p3.position(720, 130);
+  debugCheckBox.position(350, 20);
+  // p1 = createP('female bunnies are white, males are grey-ish');
+  // p2 = createP('pregnant bunnies turn red');
+  // p3 = createP('bunnies with pink eyes want to mate');
+  // p1.position(720, 50);
+  // p2.position(720, 90);
+  // p3.position(720, 130);
   bunnyPopulation = createElement('h3');
-  bunnyPopulation.position(720, 200);
+  bunnyPopulation.position(820, 45);
   foxPopulation = createElement('h3');
-  foxPopulation.position(720, 240);
+  foxPopulation.position(820, 100);
   // buttons
   createFoxButton = createButton('Add a new fox');
-  createFoxButton.position(720, 300);
+  createFoxButton.position(550, 20);
   createFoxButton.mousePressed(() => {
     let fox = validEntity('fox');
     if (fox) {
@@ -37,7 +38,7 @@ function setup() {
     }
   });
   createBunnyButton = createButton('Add a new bunny');
-  createBunnyButton.position(830, 300);
+  createBunnyButton.position(660, 20);
   createBunnyButton.mousePressed(() => {
     let bunny = validEntity('bunny');
     if (bunny) {
@@ -52,8 +53,10 @@ function setup() {
   // generating puddles
   puddle1 = new Puddle(300, 200, 100, 150);
   puddle2 = new Puddle(600, 600, 75, 120);
+  puddle3 = new Puddle(1500, 350, 80, 130);
   puddles.push(puddle1);
   puddles.push(puddle2);
+  puddles.push(puddle3);
 
   // generating bunnies and foxes
   const nBunnies = 15;
@@ -92,8 +95,8 @@ function setup() {
 function draw() {
   background(30, 190, 30);
 
-  bunnyPopulation.html('bunny Population : ' + (animals.filter(animal => animal instanceof Bunny)).length);
-  foxPopulation.html('fox Population : ' + (animals.filter(animal => animal instanceof Fox)).length);
+  bunnyPopulation.html('Bunny population : ' + (animals.filter(animal => animal instanceof Bunny)).length);
+  foxPopulation.html('Fox population : ' + (animals.filter(animal => animal instanceof Fox)).length);
 
   puddles.forEach(puddle => {
     puddle.show();
