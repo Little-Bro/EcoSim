@@ -1,6 +1,6 @@
 class Fox extends Animal {
-  constructor(x, y) {
-    super(x, y);
+  constructor(x, y, child) {
+    super(x, y, child);
     this.adult = false;
   }
 

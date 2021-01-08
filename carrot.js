@@ -7,7 +7,6 @@ class Carrot {
 
   show() {
     push();
-    noStroke()
     fill(252, 110, 2)
     translate(this.pos.x, this.pos.y);
     angleMode(DEGREES);

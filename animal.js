@@ -1,5 +1,5 @@
 class Animal {
-  constructor(x, y) {
+  constructor(x, y, child) {
     // sex, name
     this.sex = random() > 0.5 ? 'male' : 'female';
     if (this.sex == 'female') {
@@ -33,11 +33,17 @@ class Animal {
     this.species = '';
     this.state = 'roaming';
     this.faceDiameter = 40;
-    this.sightDiameter = 150;
+    this.sightDiameter = random(130, 200);
     this.debug = false;
     this.adult = false;
     this.pregnant = false;
     this.runAwaySpeed = random(0.3, 0.8);
+    this.gestationPeriodFactor = random(0.1, 0.3);
+
+    this.fathersGenes = [];
+    this.mothersGenes = [];
+    this.genes = [this.sightDiameter, this.runAwaySpeed, this.gestationPeriodFactor];
+    this.partnersGenes = []; // if the animal is female this will be the other parent's genes
   }
 
   // this function is executed each frame
@@ -88,7 +94,7 @@ class Animal {
 
   giveBirth() {
     if (this.pregnant) {
-      this.gestationPeriod += 0.1;
+      this.gestationPeriod += this.gestationPeriodFactor;
       if (this.gestationPeriod > 50) {
         this.pregnant = false;
         this.gestationPeriod = 0;
@@ -96,13 +102,27 @@ class Animal {
         let rng = floor(random(3) + 1); // 1, 2 or 3 babies per bunny
         if (this.species == 'bunnies') {
           for (let i = 0; i < rng; i++) {
-            animals.push(new Bunny(this.pos.x, this.pos.y));
+            let bunny = new Bunny(this.pos.x, this.pos.y, true);
+            this.passOnGenes(this, bunny);
+            animals.push(bunny);
           }
         } else if (this.species == 'foxes') { // foxes have 1 baby at a time
-          animals.push(new Fox(this.pos.x, this.pos.y));
+          animals.push(new Fox(this.pos.x, this.pos.y, true));
         }
       }
     }
+  }
+
+  passOnGenes(mother, offspring) {
+    // genes are inherited with equal probability
+    let genes = random() > 0.5 ? mother.genes : mother.partnersGenes;
+    // slight chance of mutation
+    if (random() < 0.2) {
+      genes.forEach(gene => gene += random(-1, 1) / 2);
+    }
+    offspring.fathersGenes = mother.partnersGenes;
+    offspring.mothersGenes = mother.genes;
+    offspring.genes = genes;
   }
 
   applyPhysics() {
@@ -205,6 +225,7 @@ class Animal {
               setTimeout(() => {
                 this.lust = 0;
                 mom.pregnant = true;
+                mom.partnersGenes = (mom == this) ? member.genes : this.genes;
                 this.reproducing = false;
               }, 3000);
             }

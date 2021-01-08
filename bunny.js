@@ -1,6 +1,6 @@
 class Bunny extends Animal {
-  constructor(x, y) {
-    super(x, y);
+  constructor(x, y, child) {
+    super(x, y, child);
     if (this.sex == 'female')
       this.colour = 255;
     else

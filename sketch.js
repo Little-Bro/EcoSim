@@ -130,3 +130,14 @@ function draw() {
     }
   }
 }
+
+function mousePressed() {
+  for (let animal of animals) {
+    if (dist(mouseX, mouseY, animal.pos.x, animal.pos.y) < animal.faceDiameter / 2) {
+      console.log(`clicked on ${animal.name}`);
+      console.log(`father's genes : ${animal.fathersGenes}`);
+      console.log(`mother's genes : ${animal.mothersGenes}`);
+      console.log(`${animal.name}'s genes : ${animal.genes}`);
+    }
+  }
+}

@@ -14,13 +14,13 @@ function validEntity(entity) {
   if (valid) {
     switch (entity) {
       case 'bunny':
-        return new Bunny(x, y);
+        return new Bunny(x, y, false);
         break;
       case 'carrot':
         return new Carrot(x, y);
         break;
       case 'fox':
-        return new Fox(x, y);
+        return new Fox(x, y, false);
         break;
       default:
         return undefined;
