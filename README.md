@@ -1,6 +1,6 @@
 # EcoSim
 
-This project is hosted on github pages ! 
+This project is hosted on github pages !
 Here it is ! -> https://little-bro.github.io/EcoSim/
 
 It is a very basic ecosystem simulation : prey (bunny) / predator (fox).
@@ -15,4 +15,7 @@ Bunnies and foxes move in a "Lévy Flight" like movement (https://en.wikipedia.o
 They can perceive their immediate surroundings (everything that's within a circle which originates from them).
 They are hungry, thirsty, and horny and will either seek food, water or a mate accordingly.
 
-Bunnies will also flee foxes upon seeing them.
+Bunnies run away from the foxes when they see them.
+
+I would like to add 'genes' which an animal could pass on to its offspring. The children will inherit the genes from their mother or their father with equal probability and each gene will have a slight chance of mutating (thereby increasing or decreasing the associated variable).
+These genes would affect the animal's attractiveness, speed, gestation period and sight diameter.
