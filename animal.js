@@ -37,6 +37,7 @@ class Animal {
     this.debug = false;
     this.adult = false;
     this.pregnant = false;
+    this.runAwaySpeed = random(0.3, 0.8);
   }
 
   // this function is executed each frame
@@ -164,7 +165,7 @@ class Animal {
   runAwayFrom(foxes) {
     // detect closest fox
     let closest = this.detectClosest(foxes);
-    // run away from closest fox
+    // does the bunny see the closest fox ?
     if (closest) {
       let index = foxes.indexOf(closest);
       let d = dist(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
@@ -172,11 +173,11 @@ class Animal {
       if (d < diameter / 2 + this.sightDiameter / 2) {
         if (this.debug)
           line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
-        // physics
+        // if it does, the bunny runs away from the fox
         let force = p5.Vector.sub(closest.pos, this.pos);
         let distance = force.mag();
         force.normalize();
-        force.mult(-0.3);
+        force.mult(-this.runAwaySpeed); // bunnies have a random speed between 0.3 and 0.8
         this.applyForce(force);
       }
     }
