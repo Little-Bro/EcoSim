@@ -107,7 +107,9 @@ class Animal {
             animals.push(bunny);
           }
         } else if (this.species == 'foxes') { // foxes have 1 baby at a time
-          animals.push(new Fox(this.pos.x, this.pos.y, true));
+          let fox = new Fox(this.pos.x, this.pos.y, true);
+          this.passOnGenes(this, fox);
+          animals.push(fox);
         }
       }
     }
