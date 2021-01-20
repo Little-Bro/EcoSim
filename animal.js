@@ -1,5 +1,5 @@
 class Animal {
-  constructor(x, y, child) {
+  constructor(x, y) {
     // sex, name
     this.sex = random() > 0.5 ? 'male' : 'female';
     if (this.sex == 'female') {
@@ -102,12 +102,12 @@ class Animal {
         let rng = floor(random(3) + 1); // 1, 2 or 3 babies per bunny
         if (this.species == 'bunnies') {
           for (let i = 0; i < rng; i++) {
-            let bunny = new Bunny(this.pos.x, this.pos.y, true);
+            let bunny = new Bunny(this.pos.x, this.pos.y);
             this.passOnGenes(this, bunny);
             animals.push(bunny);
           }
         } else if (this.species == 'foxes') { // foxes have 1 baby at a time
-          let fox = new Fox(this.pos.x, this.pos.y, true);
+          let fox = new Fox(this.pos.x, this.pos.y);
           this.passOnGenes(this, fox);
           animals.push(fox);
         }
