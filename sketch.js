@@ -13,7 +13,7 @@ function setup() {
   debugCheckBox = createCheckbox('Show debug info', false);
   debugCheckBox.changed(clicked);
   debugCheckBox.position(350, 20);
-  p1 = createP('Female bunnies are white, males are grey-ish.');
+  p1 = createP('Bunnies eat carrots, foxes eat bunnies. Female bunnies are white, males are grey-ish.');
   p2 = createP('Bunnies and foxes are hungry, thirsty, and horny and will either seek food, water or a mate accordingly.');
   p3 = createP('Animals have genes which they can pass on to their offspring (with a slight chance of mutation).');
   p1.position(820, 150);
