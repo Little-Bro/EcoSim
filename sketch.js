@@ -2,28 +2,27 @@ let animals = [];
 let carrots = [];
 let puddles = [];
 let debugCheckBox;
-// let p1, p2, p3;
+let p1, p2, p3;
 let bunnyPopulation;
 let foxPopulation;
 let createFoxButton, createBunnyButton;
 
 function setup() {
   createCanvas(800, 700);
-  //createCanvas(windowWidth, windowHeight);
   // html
   debugCheckBox = createCheckbox('Show debug info', false);
   debugCheckBox.changed(clicked);
   debugCheckBox.position(350, 20);
-  // p1 = createP('female bunnies are white, males are grey-ish');
-  // p2 = createP('pregnant bunnies turn red');
-  // p3 = createP('bunnies with pink eyes want to mate');
-  // p1.position(720, 50);
-  // p2.position(720, 90);
-  // p3.position(720, 130);
+  p1 = createP('Female bunnies are white, males are grey-ish.');
+  p2 = createP('Bunnies and foxes are hungry, thirsty, and horny and will either seek food, water or a mate accordingly.');
+  p3 = createP('Animals have genes which they can pass on to their offspring (with a slight chance of mutation).');
+  p1.position(820, 150);
+  p2.position(820, 200);
+  p3.position(820, 250);
   bunnyPopulation = createElement('h3');
   bunnyPopulation.position(820, 45);
   foxPopulation = createElement('h3');
-  foxPopulation.position(820, 100);
+  foxPopulation.position(820, 70);
   // buttons
   createFoxButton = createButton('Add a new fox');
   createFoxButton.position(550, 20);
