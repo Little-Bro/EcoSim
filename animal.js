@@ -165,7 +165,6 @@ class Animal {
 
   moveTowards(targetPos) {
     let force = p5.Vector.sub(targetPos, this.pos);
-    let distance = force.mag();
     force.normalize();
     force.mult(0.5);
     this.applyForce(force);
@@ -197,7 +196,6 @@ class Animal {
           line(this.pos.x, this.pos.y, closest.pos.x, closest.pos.y);
         // if it does, the bunny runs away from the fox
         let force = p5.Vector.sub(closest.pos, this.pos);
-        let distance = force.mag();
         force.normalize();
         force.mult(-this.runAwaySpeed); // bunnies have a random speed between 0.3 and 0.8
         this.applyForce(force);
