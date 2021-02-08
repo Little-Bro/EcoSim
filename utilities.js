@@ -8,6 +8,8 @@ function validEntity(entity) {
     let d = dist(x, y, puddle.pos.x, puddle.pos.y);
     if (d - 20 < 0.5 * (puddle.radius + (puddle.min + puddle.max) * 0.5)) {
       valid = false;
+      console.log('WOOPS');
+      return undefined;
       break;
     }
   }
