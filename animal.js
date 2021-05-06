@@ -209,24 +209,26 @@ class Animal {
   manageHornyState(species) {
     if (this.state == 'horny') {
       for (let member of species) {
-        let d = dist(this.pos.x, this.pos.y, member.pos.x, member.pos.y);
-        if (d < 0.5 * (this.sightDiameter + member.sightDiameter)) {
-          let matingConditions = (this.sex != member.sex && member.state == 'horny' && !member.reproducing && !member.pregnant);
-          if (matingConditions) {
-            this.reproducing = true;
-            if (this.debug)
-              line(this.pos.x, this.pos.y, member.pos.x, member.pos.y);
-            member.vel.mult(0);
-            this.moveTowards(member.pos);
-            let mom = (this.sex == 'female') ? this : member;
-            if (d < 5) {
-              this.vel.mult(0);
-              setTimeout(() => {
-                this.lust = 0;
-                mom.pregnant = true;
-                mom.partnersGenes = (mom == this) ? member.genes : this.genes;
-                this.reproducing = false;
-              }, 3000);
+        if (member.state == 'horny') {
+          let d = dist(this.pos.x, this.pos.y, member.pos.x, member.pos.y);
+          if (d < 0.5 * (this.sightDiameter + member.sightDiameter)) {
+            let matingConditions = (this.sex != member.sex && !member.reproducing && !member.pregnant);
+            if (matingConditions) {
+              this.reproducing = true;
+              if (this.debug)
+                line(this.pos.x, this.pos.y, member.pos.x, member.pos.y);
+              member.vel.mult(0);
+              this.moveTowards(member.pos);
+              let mom = (this.sex == 'female') ? this : member;
+              if (d < 5) {
+                this.vel.mult(0);
+                setTimeout(() => {
+                  this.lust = 0;
+                  mom.pregnant = true;
+                  mom.partnersGenes = (mom == this) ? member.genes : this.genes;
+                  this.reproducing = false;
+                }, 3000);
+              }
             }
           }
         }
